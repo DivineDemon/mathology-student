@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import Image from "../assets/img/image.svg";
-import Loginbg from "../assets/img/loginbg.svg";
+import Loginbg from "../assets/img/loginBg.svg";
 
 const Login = () => {
   const navigate = useNavigate();
