@@ -2,11 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  scroll-behavior: smooth;
+@layer base {
+  input {
+    @apply focus:outline-none focus:outline-0 focus:ring-0 focus-visible:outline-none focus-visible:outline-0 focus-visible:ring-0;
+  }
+
+  select {
+    @apply focus:outline-none focus:outline-0 focus:ring-0 focus-visible:outline-none focus-visible:outline-0 focus-visible:ring-0;
+  }
+
+  button {
+    @apply focus:outline-none focus:outline-0 focus:ring-0 focus-visible:outline-none focus-visible:outline-0 focus-visible:ring-0;
+  }
+
+  a {
+    @apply focus:outline-none focus:outline-0 focus:ring-0 focus-visible:outline-none focus-visible:outline-0 focus-visible:ring-0;
+  }
+
+  textarea {
+    @apply focus:outline-none focus:outline-0 focus:ring-0 focus-visible:outline-none focus-visible:outline-0 focus-visible:ring-0;
+  }
 }
 
 @layer base {
@@ -36,6 +51,14 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -62,12 +85,59 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@font-face {
+  font-family: "Sofia Pro";
+  font-style: normal;
+  font-weight: normal;
+  src:
+    local("Sofia Pro Regular"),
+    url("../fonts/Sofia Pro Regular Az.woff") format("woff");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-family: "Sofia Pro", sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(201 100% 50%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #efefef;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
