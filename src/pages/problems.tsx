@@ -1,15 +1,10 @@
 import { useEffect, useState } from "react";
 
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsUpDown,
-  Loader2,
-  Search,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+import Sort from "@/assets/img/sort.svg";
 import NotFound from "@/components/not-found";
 import { Button } from "@/components/ui/button";
 import {
@@ -180,7 +175,8 @@ const Problems = () => {
                           className="w-full"
                           variant="ghost"
                         >
-                          Standard <ChevronsUpDown />
+                          Standard&nbsp;
+                          <img src={Sort} alt="sort-icon" className="size-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-24">
@@ -211,7 +207,7 @@ const Problems = () => {
                           variant="ghost"
                         >
                           Difficulty Level&nbsp;
-                          <ChevronsUpDown />
+                          <img src={Sort} alt="sort-icon" className="size-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>

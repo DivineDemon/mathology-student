@@ -16,12 +16,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { useGetUserQuery } from "@/store/services/auth";
 import { usePostMathSolutionMutation } from "@/store/services/math";
-import {
-  useGetQuestionQuery,
-  useGetQuestionsQuery,
-} from "@/store/services/question";
+import { useGetQuestionQuery } from "@/store/services/question";
 
 const QuestionArtboard = () => {
   const { id } = useParams();
@@ -42,10 +38,16 @@ const QuestionArtboard = () => {
     setToken(test ?? "");
   };
 
-  const { data: user } = useGetUserQuery(`${token}`, {
-    skip: !token,
-    refetchOnMountOrArgChange: true,
-  });
+  const { data: question } = useGetQuestionQuery(
+    {
+      id: `${id}`,
+      token: `${token}`,
+    },
+    {
+      skip: !id || !token,
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   const { data, isLoading: fetching } = useGetQuestionQuery(
     {
@@ -57,11 +59,6 @@ const QuestionArtboard = () => {
       refetchOnMountOrArgChange: true,
     }
   );
-
-  const { data: questions } = useGetQuestionsQuery(`${token}`, {
-    skip: !token,
-    refetchOnMountOrArgChange: true,
-  });
 
   const explain = async () => {
     const response = await getExplanation({
@@ -75,15 +72,6 @@ const QuestionArtboard = () => {
       // @ts-ignore
       setExplained(response.solution_explain);
     }
-  };
-
-  const handleNextQuestion = () => {
-    const findIndex = questions!.findIndex(
-      (question) => question.question_id === Number(id)
-    );
-    navigate(
-      `/question-solution/${questions?.[Number(findIndex) + 1]?.question_id}`
-    );
   };
 
   useEffect(() => {
@@ -176,19 +164,23 @@ const QuestionArtboard = () => {
                   <Loader2 className="size-10 animate-spin text-primary" />
                 </div>
               ) : (
-                <p className="h-full w-full text-left">{explained}</p>
+                <p className="h-full w-full text-left">
+                  {explained}&nbsp;{question?.solution_file}
+                </p>
               )}
             </div>
           </div>
         </div>
         <div className="flex w-full items-center justify-end gap-4">
-          {user?.total_attempts && user?.total_attempts < 2 && (
-            <Button type="button" variant="outline">
-              Retry
-            </Button>
-          )}
-          <Button type="button" variant="default" onClick={handleNextQuestion}>
-            Next Question
+          {question?.total_attempts &&
+            question?.total_attempts < 2 &&
+            !isCorrect && (
+              <Button type="button" variant="outline">
+                Retry
+              </Button>
+            )}
+          <Button type="button" variant="default" onClick={() => navigate(-1)}>
+            Back
           </Button>
         </div>
       </div>
