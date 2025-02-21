@@ -172,17 +172,19 @@ const QuestionArtboard = () => {
           </div>
         </div>
         <div className="flex w-full items-center justify-end gap-4">
-          {question?.total_attempts !== undefined &&
-          question?.total_attempts > 0 &&
-          question?.total_attempts < 2 &&
-          !isCorrect ? (
+          {(question?.total_attempts as number) < 2 && !isCorrect ? (
             <Button type="button" variant="outline">
               Retry
             </Button>
-          ) : null}
-          <Button type="button" variant="default" onClick={() => navigate(-1)}>
-            Back
-          </Button>
+          ) : (
+            <Button
+              type="button"
+              variant="default"
+              onClick={() => navigate(-1)}
+            >
+              Back
+            </Button>
+          )}
         </div>
       </div>
     </div>
