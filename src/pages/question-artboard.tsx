@@ -16,17 +16,30 @@ import {
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { usePostMathSolutionMutation } from "@/store/services/math";
-import { useGetQuestionQuery } from "@/store/services/question";
+import {
+  useGetQuestionAttemptsQuery,
+  useGetQuestionQuery,
+} from "@/store/services/question";
 
 const QuestionArtboard = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { getToken } = useKindeAuth();
-  const [explained, setExplained] = useState<string>("");
+  const [reveal, setReveal] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
-  const [getExplanation, { isLoading }] = usePostMathSolutionMutation();
+  const [submittedSolution, setSubmittedSolution] = useState<string>("");
+
+  const { data: attempts } = useGetQuestionAttemptsQuery(
+    {
+      id: Number(id),
+      token: `${token}`,
+    },
+    {
+      skip: !id || !token,
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   const handleToken = async () => {
     let test: string | undefined = "";
@@ -60,37 +73,22 @@ const QuestionArtboard = () => {
     }
   );
 
-  const explain = async () => {
-    const response = await getExplanation({
-      token: `${token}`,
-      question_id: Number(id!),
-      query:
-        "Solve this question step-by-step with some values and explain each step.",
-    });
-
-    if (!response.error) {
-      // @ts-ignore
-      setExplained(response.solution_explain);
-    }
-  };
-
   useEffect(() => {
     handleToken();
-  }, [getToken]);
 
-  useEffect(() => {
-    if (token) {
-      explain();
-    }
+    const userSolution: {
+      status: string;
+      solution: string;
+    } = JSON.parse(localStorage.getItem("solution")!);
 
-    const correct = localStorage.getItem("solution");
-
-    if (correct === "Correct") {
+    if (userSolution.status === "Correct") {
       setIsCorrect(true);
     } else {
       setIsCorrect(false);
     }
-  }, [token]);
+
+    setSubmittedSolution(userSolution.solution);
+  }, [getToken]);
 
   return fetching ? (
     <div className="flex h-screen w-full items-center justify-center">
@@ -158,32 +156,42 @@ const QuestionArtboard = () => {
                 {isCorrect ? "Correct" : "Incorrect"}
               </h1>
             </div>
-            <div className="flex h-full max-h-full w-full items-start justify-start overflow-y-auto p-5">
-              {isLoading ? (
-                <div className="flex h-full w-full items-center justify-center">
-                  <Loader2 className="size-10 animate-spin text-primary" />
-                </div>
-              ) : (
+            <div className="flex h-full max-h-full w-full flex-col items-start justify-start overflow-y-auto p-5">
+              <img src={submittedSolution} alt="solution" className="w-full" />
+              {reveal && (
                 <p className="h-full w-full text-left">
-                  {explained}&nbsp;{question?.solution_file}
+                  {question?.solution_file}
                 </p>
               )}
             </div>
           </div>
         </div>
         <div className="flex w-full items-center justify-end gap-4">
-          {(question?.total_attempts as number) < 2 && !isCorrect ? (
-            <Button type="button" variant="outline">
+          {attempts && attempts < 2 ? (
+            <Button
+              onClick={() => navigate(-1)}
+              type="button"
+              variant="outline"
+            >
               Retry
             </Button>
           ) : (
-            <Button
-              type="button"
-              variant="default"
-              onClick={() => navigate(-1)}
-            >
-              Back
-            </Button>
+            <>
+              <Button
+                onClick={() => setReveal(!reveal)}
+                type="button"
+                variant="outline"
+              >
+                {reveal ? "Hide Solution" : "Reveal Solution"}
+              </Button>
+              <Button
+                type="button"
+                variant="default"
+                onClick={() => navigate(-1)}
+              >
+                Back
+              </Button>
+            </>
           )}
         </div>
       </div>

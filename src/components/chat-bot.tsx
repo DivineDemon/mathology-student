@@ -1,53 +1,85 @@
 import { useEffect, useState } from "react";
 
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
-import { Send } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
+import { useParams } from "react-router-dom";
 
-import { useChatbotMutation } from "@/store/services/math";
+import { usePostMathSolutionMutation } from "@/store/services/math";
 
 import { Input } from "./ui/input";
 
 interface Message {
-  sender: "user" | "bot";
+  id: number;
   text: string;
+  sender: "user" | "bot";
+  isLoading?: boolean;
 }
 
 const ChatBot = () => {
+  const { id } = useParams();
   const { getToken } = useKindeAuth();
   const [token, setToken] = useState<string>("");
   const [input, setInput] = useState<string>("");
-  const [chat, { isLoading }] = useChatbotMutation();
   const [messages, setMessages] = useState<Message[]>([]);
+  const [chat, { isLoading }] = usePostMathSolutionMutation();
 
   const handleToken = async () => {
-    let test: string | undefined = "";
-
-    if (getToken) {
-      test = await getToken();
-    }
-
-    setToken(test ?? "");
+    const newToken = getToken ? await getToken() : "";
+    setToken(newToken ?? "");
   };
 
   const handleChat = async () => {
     if (!input.trim()) return;
 
-    const userMessage: Message = { sender: "user", text: input.trim() };
-    setMessages((prev) => [...prev, userMessage]);
+    const userMessage: Message = {
+      id: Date.now(),
+      sender: "user",
+      text: input.trim(),
+    };
+    const botLoadingMessage: Message = {
+      id: Date.now() + 1,
+      sender: "bot",
+      text: "Thinking...",
+      isLoading: true,
+    };
 
-    const response = await chat({
-      question_title: input.trim(),
-      token: `${token}`,
-    });
+    setMessages((prev) => [...prev, userMessage, botLoadingMessage]);
+    setInput("");
 
-    if (response.data) {
-      const botMessage: Message = {
-        sender: "bot",
-        text: response.data.solution_explain,
-      };
+    try {
+      const response = await chat({
+        question_id: Number(id),
+        query: input.trim(),
+        token: token,
+      });
 
-      setMessages((prev) => [...prev, botMessage]);
-      setInput("");
+      if (response.data) {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.isLoading
+              ? {
+                  id: Date.now(),
+                  sender: "bot",
+                  text: response.data.solution_explain,
+                }
+              : msg
+          )
+        );
+      } else {
+        setMessages((prev) => prev.filter((msg) => !msg.isLoading));
+      }
+    } catch (error) {
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.isLoading
+            ? {
+                id: Date.now(),
+                sender: "bot",
+                text: "Something went wrong. Try again!",
+              }
+            : msg
+        )
+      );
     }
   };
 
@@ -69,30 +101,35 @@ const ChatBot = () => {
           <p className="text-white">Online</p>
         </div>
       </div>
+
       <div className="flex h-[calc(100vh-182px)] flex-col items-start justify-start gap-4 overflow-y-auto p-4">
-        {messages.map((message, idx) => (
-          <>
-            {message.sender === "bot" && (
-              <div
-                key={idx}
-                className="mr-auto flex items-start justify-start gap-2"
-              >
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`flex ${message.sender === "bot" ? "mr-auto" : "ml-auto"} items-start gap-2`}
+          >
+            {message.sender === "bot" ? (
+              <>
                 <span className="size-10 shrink-0 rounded-full border bg-white p-2 text-center text-primary shadow-md">
                   M
                 </span>
                 <span className="rounded-md rounded-tr-2xl bg-gray-100 px-4 py-2 text-sm text-primary">
-                  {message.text}
+                  {message.isLoading ? (
+                    <Loader2 className="size-7 animate-spin" />
+                  ) : (
+                    message.text
+                  )}
                 </span>
-              </div>
-            )}
-            {message.sender === "user" && (
-              <span className="ml-auto rounded-md rounded-tl-2xl bg-primary px-4 py-2 text-sm text-white">
+              </>
+            ) : (
+              <span className="rounded-md rounded-tl-2xl bg-primary px-4 py-2 text-sm text-white">
                 {message.text}
               </span>
             )}
-          </>
+          </div>
         ))}
       </div>
+
       <div className="flex w-full flex-col items-center justify-center gap-2 px-4">
         <form
           onSubmit={(e) => {
@@ -112,7 +149,7 @@ const ChatBot = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="flex size-9 items-center justify-center rounded-full bg-blue-500 text-sm font-medium text-white hover:bg-blue-600"
+            className="flex size-9 items-center justify-center rounded-full bg-blue-500 text-sm font-medium text-white hover:bg-blue-600 disabled:cursor-not-allowed"
           >
             <Send className="h-4 w-4" />
           </button>

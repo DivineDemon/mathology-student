@@ -31,6 +31,7 @@ import { usePostMathSolveMathMutation } from "@/store/services/math";
 import {
   useGetQuestionQuery,
   useGetQuestionsQuery,
+  usePostAttemptQuestionMutation,
 } from "@/store/services/question";
 
 const QuestionSolution = () => {
@@ -40,6 +41,8 @@ const QuestionSolution = () => {
   const canvasRef = useRef<any>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [warn, setWarn] = useState<boolean>(false);
+  const [increaseAttempt, { isLoading: attempting }] =
+    usePostAttemptQuestionMutation();
   const [token, setToken] = useState<string | null>(null);
   const [movement, setMovement] = useState<string>("next");
   const [calculate, setCalculate] = useState<boolean>(false);
@@ -84,6 +87,7 @@ const QuestionSolution = () => {
   };
 
   const handleExport = async () => {
+    let image = "";
     let response = null;
     const stageInstance = canvasRef.current?.getStage();
 
@@ -115,7 +119,7 @@ const QuestionSolution = () => {
       });
     } else {
       const dataURL = await stageInstance.toBlob();
-      const image = await parseImage(dataURL as File);
+      image = (await parseImage(dataURL as File)) as string;
 
       response = await solution({
         token: `${token}`,
@@ -127,8 +131,22 @@ const QuestionSolution = () => {
     }
 
     if (!response?.error) {
-      navigate(`/question-artboard/${data?.question_id}`);
-      localStorage.setItem("solution", response?.data as string);
+      localStorage.setItem(
+        "solution",
+        JSON.stringify({
+          status: response?.data as string,
+          solution: image as string,
+        })
+      );
+
+      const increment = await increaseAttempt({
+        id: data?.question_id as number,
+        token: `${token}`,
+      });
+
+      if (!increment.error) {
+        navigate(`/question-artboard/${data?.question_id}`);
+      }
     } else {
       toast.custom(() => (
         <CustomToast
@@ -330,7 +348,7 @@ const QuestionSolution = () => {
             <Button
               type="button"
               variant="outline"
-              disabled={isSolving}
+              disabled={isSolving || attempting}
               onClick={() => {
                 setMovement("prev");
                 setWarn(true);
@@ -341,7 +359,7 @@ const QuestionSolution = () => {
             <Button
               type="button"
               variant="outline"
-              disabled={isSolving}
+              disabled={isSolving || attempting}
               onClick={() => {
                 setMovement("next");
                 setWarn(true);
@@ -353,9 +371,9 @@ const QuestionSolution = () => {
               type="button"
               variant="default"
               onClick={handleExport}
-              disabled={isSolving}
+              disabled={isSolving || attempting}
             >
-              {isSolving ? (
+              {isSolving || attempting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Processing...

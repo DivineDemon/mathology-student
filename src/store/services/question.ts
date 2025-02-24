@@ -50,14 +50,27 @@ export const standardApi = api.injectEndpoints({
       //@ts-ignore
       invalidatesTags: ["questions"],
     }),
-    postAttemptQuestion: builder.query({
-      query: ({ id, body }: { id: string; body: string }) => ({
+    postAttemptQuestion: builder.mutation({
+      query: ({ id, token }: { id: number; token: string }) => ({
         url: `/questions/${id}/attempt/`,
         method: "POST",
-        body,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }),
-      //@ts-ignore
-      invalidatesTags: ["questions"],
+    }),
+    getQuestionAttempts: builder.query({
+      query: ({ id, token }: { id: number; token: string }) => ({
+        url: `/questions/${id}/attempts/`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+      transformResponse: (response: {
+        question_id: number;
+        total_attempts: number;
+      }) => response.total_attempts,
     }),
   }),
 });
@@ -65,5 +78,6 @@ export const {
   useGetQuestionQuery,
   useGetQuestionsQuery,
   usePostQuestionsQuery,
-  usePostAttemptQuestionQuery,
+  useGetQuestionAttemptsQuery,
+  usePostAttemptQuestionMutation,
 } = standardApi;
