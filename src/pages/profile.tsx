@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
-import { ChevronDown, FileCheck, FileText, Loader2 } from "lucide-react";
+import { ChevronDown, FileChartColumn, FileText, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import Chart from "@/components/profile/chart";
@@ -60,49 +60,51 @@ const Profile = () => {
   }, [getToken]);
 
   return isLoading && isLoadingUser && isLoadingStats ? (
-    <div className="flex h-full w-full items-center justify-center">
-      <Loader2 className="size-16 animate-spin text-primary" />
+    <div className="h-screen w-full">
+      <div className="flex h-full w-full items-center justify-center">
+        <Loader2 className="size-16 animate-spin text-primary" />
+      </div>
     </div>
   ) : (
-    <div className="flex h-screen w-full flex-col items-start justify-start">
+    <div className="flex h-full min-h-screen w-full flex-col items-start justify-start">
       <nav className="flex h-16 w-full shrink-0 items-center justify-between border-b px-5 py-2.5">
         <div className="flex items-center justify-center gap-4">
           <SidebarTrigger className="block lg:hidden" />
           <div className="text-3xl font-bold lg:text-4xl">Profile</div>
         </div>
       </nav>
-      <div className="flex h-[calc(100vh-64px)] w-full flex-col items-start justify-start p-5">
-        <div className="flex h-1/2 w-full items-center justify-center gap-5">
-          <div className="flex h-full w-1/3 flex-col items-start justify-start gap-5 rounded-xl bg-white p-5">
-            <div className="flex h-full w-full items-center justify-center gap-5 rounded-xl bg-gray-100 p-5">
+      <div className="flex min-h-[calc(100vh-64px)] w-full flex-col items-start justify-start p-5">
+        <div className="flex w-full flex-col items-center justify-center gap-5 lg:h-1/2 lg:flex-row">
+          <div className="flex h-full w-full flex-col items-start justify-start gap-3 rounded-xl bg-white p-5 lg:w-1/3">
+            <div className="flex h-full w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-3 lg:gap-5">
               <img
                 src="https://ui.shadcn.com/avatars/04.png"
-                className="size-32 rounded-xl border-2 border-white"
+                className="size-16 rounded-xl border-2 border-white lg:size-20"
               />
               <div className="flex flex-1 flex-col items-center justify-center">
-                <span className="w-full text-left text-2xl font-bold">
-                  {user?.email}
+                <span className="w-full text-left text-xl font-bold lg:text-3xl">
+                  {user?.email || "M.Ahmad"}
                 </span>
-                <span className="w-full text-left text-sm text-gray-400">
-                  {user?.designation}
+                <span className="lg:text-medium w-full break-all text-left text-gray-400 md:text-sm">
+                  {user?.designation || "M.Ahmad@gmail.com"}
                 </span>
               </div>
             </div>
-            <div className="flex h-full w-full items-center justify-center gap-5 rounded-xl bg-gray-100 p-5">
-              <div className="flex size-32 items-center justify-center rounded-xl border-2 border-white bg-primary p-8 text-white">
-                <FileCheck className="size-full" />
+            <div className="flex h-full w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
+              <div className="flex size-16 items-center justify-center rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
+                <FileChartColumn className="size-full" />
               </div>
               <div className="flex flex-1 flex-col items-center justify-center">
-                <span className="w-full text-left text-2xl font-bold">
-                  {user?.total_attempts}369
+                <span className="w-full text-left text-xl font-bold lg:text-3xl">
+                  {user?.total_attempts || "369"}
                 </span>
-                <span className="w-full text-left text-sm text-gray-400">
-                  Attempted Questions
+                <span className="lg:text-medium w-full text-left text-sm text-gray-400">
+                  Attempt Questions
                 </span>
               </div>
             </div>
           </div>
-          <div className="flex h-full w-2/3 flex-col items-start justify-start gap-5 rounded-xl bg-white p-5">
+          <div className="flex h-full w-full flex-col items-start justify-start gap-5 rounded-xl bg-white p-5 lg:w-2/3">
             <div className="flex w-full items-center justify-center">
               <span className="flex-1 text-left text-2xl font-bold">
                 Practice Activity
@@ -140,6 +142,7 @@ const Profile = () => {
             )}
           </div>
         </div>
+
         <div className="flex h-1/2 w-full flex-col items-start justify-start gap-5 pt-5">
           <span className="w-full text-left text-2xl font-bold">Practices</span>
           <div className="grid w-full grid-cols-2 items-center justify-center gap-5">
