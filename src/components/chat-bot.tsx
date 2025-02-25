@@ -140,7 +140,7 @@ const ChatBot = () => {
         >
           <Input
             type="text"
-            className="h-14 flex-1 rounded-md text-sm focus:outline-none focus:outline-0 focus:ring-0 focus-visible:outline-none focus-visible:outline-0 focus-visible:ring-0"
+            className="h-14 flex-1 rounded-md border-none text-sm focus:outline-none focus:outline-0 focus:ring-0 focus-visible:outline-none focus-visible:outline-0 focus-visible:ring-0"
             placeholder="Type a message..."
             value={input}
             disabled={isLoading}

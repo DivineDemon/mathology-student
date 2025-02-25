@@ -74,24 +74,24 @@ const Profile = () => {
         </div>
       </nav>
       <div className="flex min-h-[calc(100vh-64px)] w-full flex-col items-start justify-start p-5">
-        <div className="flex w-full flex-col items-center justify-center gap-5 lg:h-1/2 lg:flex-row">
-          <div className="flex h-full w-full flex-col items-start justify-start gap-3 rounded-xl bg-white p-5 lg:w-1/3">
-            <div className="flex h-full w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-3 lg:gap-5">
+        <div className="flex w-full flex-col items-start justify-center gap-5 lg:h-1/2 lg:flex-row">
+          <div className="flex h-full w-full flex-row items-start justify-start gap-3 rounded-xl bg-white p-5 lg:w-1/2 lg:flex-col">
+            <div className="flex h-full w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
               <img
                 src="https://ui.shadcn.com/avatars/04.png"
-                className="size-16 rounded-xl border-2 border-white lg:size-20"
+                className="size-16 shrink-0 rounded-xl border-2 border-white lg:size-16"
               />
-              <div className="flex flex-1 flex-col items-center justify-center">
-                <span className="w-full text-left text-xl font-bold lg:text-3xl">
-                  {user?.email || "M.Ahmad"}
+              <div className="flex flex-1 flex-col items-start justify-start">
+                <span className="w-full overflow-hidden truncate text-left text-xl font-bold lg:w-[140px] xl:w-full">
+                  {user?.email || "johndoe@example.com"}
                 </span>
-                <span className="lg:text-medium w-full break-all text-left text-gray-400 md:text-sm">
-                  {user?.designation || "M.Ahmad@gmail.com"}
+                <span className="lg:text-medium w-full text-left text-gray-400 md:text-sm">
+                  {user?.designation || "Creator"}
                 </span>
               </div>
             </div>
             <div className="flex h-full w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
-              <div className="flex size-16 items-center justify-center rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
+              <div className="flex size-16 shrink-0 items-center justify-center rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
                 <FileChartColumn className="size-full" />
               </div>
               <div className="flex flex-1 flex-col items-center justify-center">

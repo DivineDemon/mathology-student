@@ -113,12 +113,12 @@ const AttemptQuestion = () => {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <div className="flex w-full flex-col items-center justify-center">
+          <div className="flex w-full flex-col items-center justify-center gap-1.5">
             <span className="w-full text-left font-semibold text-primary">
               {data?.course_title}
             </span>
-            <div className="flex w-full items-center justify-center">
-              <span className="line-clamp-1 flex-1 overflow-hidden truncate text-left text-[48px] font-bold">
+            <div className="flex w-full items-start justify-between">
+              <span className="line-clamp-1 w-full max-w-3xl flex-1 text-left text-4xl font-bold lg:text-[48px]">
                 {data?.question_title}
               </span>
               <span className="rounded-md bg-white px-4 py-1.5 text-primary">

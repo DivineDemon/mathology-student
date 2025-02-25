@@ -249,13 +249,13 @@ const Problems = () => {
                     }
                   >
                     <TableCell className="overflow-hidden truncate font-medium">
-                      {truncateString(question.question_title, 20)}
+                      {truncateString(question.question_title, 10)}
                     </TableCell>
                     <TableCell className="overflow-hidden truncate">
-                      {truncateString(question.course_title, 20)}
+                      {truncateString(question.course_title, 10)}
                     </TableCell>
                     <TableCell className="overflow-hidden truncate">
-                      {truncateString(question.lesson_title, 20)}
+                      {truncateString(question.lesson_title, 10)}
                     </TableCell>
                     <TableCell className="text-center">
                       {question.standard_title}

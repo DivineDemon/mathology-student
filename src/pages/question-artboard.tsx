@@ -95,7 +95,7 @@ const QuestionArtboard = () => {
       <Loader2 className="size-16 animate-spin text-primary" />
     </div>
   ) : (
-    <div className="flex h-screen w-full flex-col items-start justify-start">
+    <div className="flex h-screen max-h-screen w-full flex-col items-start justify-start overflow-y-auto">
       <nav className="flex h-16 w-full shrink-0 items-center justify-between border-b px-5 py-2.5">
         <div className="flex items-center justify-center gap-4">
           <SidebarTrigger className="block lg:hidden" />
@@ -104,7 +104,7 @@ const QuestionArtboard = () => {
           </div>
         </div>
       </nav>
-      <div className="flex h-[calc(100vh-64px)] w-full flex-col items-start justify-start gap-5 p-5">
+      <div className="flex min-h-[calc(100vh-64px)] w-full flex-col items-start justify-start gap-5 p-5">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -123,8 +123,8 @@ const QuestionArtboard = () => {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <div className="grid h-full w-full grid-cols-3 items-center justify-center gap-5">
-          <div className="relative col-span-2 flex h-full w-full flex-col items-start justify-start overflow-hidden rounded-xl bg-white shadow-md">
+        <div className="grid h-full w-full grid-cols-2 items-center justify-center gap-5 xl:grid-cols-3">
+          <div className="relative col-span-1 flex h-full w-full flex-col items-start justify-start overflow-hidden rounded-xl bg-white shadow-md xl:col-span-2">
             <div
               className="z-0 flex h-full w-full"
               style={{
@@ -140,7 +140,7 @@ const QuestionArtboard = () => {
               <MathJax>{data?.question_title}</MathJax>
             </div>
           </div>
-          <div className="col-span-1 flex h-full w-full flex-col items-start justify-start overflow-hidden rounded-xl bg-white shadow-md">
+          <div className="col-span-1 flex h-[568px] w-full flex-col items-start justify-start overflow-x-auto rounded-xl bg-white shadow-md">
             <div
               className={cn("flex w-full items-center gap-2 rounded-t-xl p-4", {
                 "bg-destructive": !isCorrect,
@@ -166,7 +166,7 @@ const QuestionArtboard = () => {
             </div>
           </div>
         </div>
-        <div className="flex w-full items-center justify-end gap-4">
+        <div className="flex w-full items-center justify-end gap-4 pb-5">
           {attempts && attempts < 2 ? (
             <Button
               onClick={() => navigate(-1)}

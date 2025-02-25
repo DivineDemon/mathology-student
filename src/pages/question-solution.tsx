@@ -254,15 +254,13 @@ const QuestionSolution = () => {
             </BreadcrumbList>
           </Breadcrumb>
           <div className="flex w-full items-center justify-center">
-            <div className="flex flex-1 flex-col items-center justify-center">
+            <div className="flex flex-1 flex-col items-start justify-center gap-1.5">
               <span className="w-full text-left font-semibold text-primary">
                 {data?.course_title}
               </span>
-              <div className="flex w-full items-center justify-center">
-                <span className="line-clamp-1 flex-1 overflow-hidden truncate text-left text-[48px] font-bold">
-                  {data?.question_title}
-                </span>
-              </div>
+              <span className="line-clamp-1 w-full max-w-3xl flex-1 text-left text-4xl font-bold lg:text-[48px]">
+                {data?.question_title}
+              </span>
               <span className="w-full text-left font-semibold capitalize text-gray-400">
                 Standard:&nbsp;{data?.standard_title}&nbsp;|&nbsp;Difficulty
                 Level:&nbsp;
@@ -277,7 +275,7 @@ const QuestionSolution = () => {
                 </span>
               </span>
             </div>
-            <div className="relative flex h-full w-72 items-center justify-center gap-5 rounded-xl border border-dashed border-primary bg-white">
+            <div className="relative flex h-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-primary bg-white p-3 lg:w-72 lg:flex-row lg:gap-5 lg:p-0">
               {uploadedImage && (
                 <Button
                   type="button"
@@ -295,8 +293,8 @@ const QuestionSolution = () => {
                 onChange={handleUpload}
                 accept="image/png, image/jpg, image/jpeg"
               />
-              <Upload className="size-10 shrink-0 text-primary" />
-              <div className="flex flex-col items-start justify-center">
+              <Upload className="size-8 shrink-0 text-primary lg:size-10" />
+              <div className="flex flex-col items-center justify-center gap-1.5">
                 <Button
                   type="button"
                   variant="default"
@@ -305,6 +303,7 @@ const QuestionSolution = () => {
                       fileRef.current.click();
                     }
                   }}
+                  className=""
                 >
                   Upload Solution
                 </Button>
