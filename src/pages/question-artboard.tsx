@@ -140,7 +140,7 @@ const QuestionArtboard = () => {
               <MathJax>{data?.question_title}</MathJax>
             </div>
           </div>
-          <div className="col-span-1 flex h-[568px] w-full flex-col items-start justify-start overflow-x-auto rounded-xl bg-white shadow-md">
+          <div className="col-span-1 flex h-[568px] w-full flex-col items-start justify-start overflow-x-auto rounded-xl bg-white shadow-md xl:h-full">
             <div
               className={cn("flex w-full items-center gap-2 rounded-t-xl p-4", {
                 "bg-destructive": !isCorrect,

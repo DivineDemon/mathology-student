@@ -135,7 +135,9 @@ const QuestionSolution = () => {
         "solution",
         JSON.stringify({
           status: response?.data as string,
-          solution: image as string,
+          solution: uploadedImage
+            ? (uploadedImage as string)
+            : (image as string),
         })
       );
 

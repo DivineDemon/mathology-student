@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
+import MDEditor from "@uiw/react-md-editor";
 import { Loader2, Send } from "lucide-react";
 import { useParams } from "react-router-dom";
 
@@ -117,13 +118,27 @@ const ChatBot = () => {
                   {message.isLoading ? (
                     <Loader2 className="size-7 animate-spin" />
                   ) : (
-                    message.text
+                    <MDEditor.Markdown
+                      source={message.text as string}
+                      style={{
+                        background: "transparent",
+                        padding: 0,
+                        color: "black",
+                      }}
+                    />
                   )}
                 </span>
               </>
             ) : (
               <span className="rounded-md rounded-tl-2xl bg-primary px-4 py-2 text-sm text-white">
-                {message.text}
+                <MDEditor.Markdown
+                  source={message.text as string}
+                  style={{
+                    background: "transparent",
+                    padding: 0,
+                    color: "white",
+                  }}
+                />
               </span>
             )}
           </div>

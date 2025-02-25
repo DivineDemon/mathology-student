@@ -24,6 +24,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn, truncateString } from "@/lib/utils";
+import { useLoginMutation } from "@/store/services/auth";
 import { useGetQuestionsQuery } from "@/store/services/question";
 import { useGetStandardsQuery } from "@/store/services/standard";
 
@@ -31,7 +32,8 @@ const ITEMS_PER_PAGE = 10;
 
 const Problems = () => {
   const navigate = useNavigate();
-  const { getToken } = useKindeAuth();
+  const [register] = useLoginMutation();
+  const { getToken, user } = useKindeAuth();
   const [token, setToken] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -70,6 +72,19 @@ const Problems = () => {
   const startItem = (currentPage - 1) * ITEMS_PER_PAGE + 1;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
   const endItem = Math.min(currentPage * ITEMS_PER_PAGE, totalItems);
+
+  const handleUserRegister = async () => {
+    await register({
+      token: `${token}`,
+      credentials: {
+        account_type: "student",
+        designation: "Student",
+        email: `${user?.email}`,
+        profile_picture_url: `${user?.picture}`,
+        name: `${user?.given_name} ${user?.family_name}`,
+      },
+    });
+  };
 
   const handlePageChange = (page: number) => {
     if (page > 0 && page <= totalPages) {
@@ -133,7 +148,11 @@ const Problems = () => {
 
   useEffect(() => {
     handleToken();
-  }, [getToken]);
+
+    if (token) {
+      handleUserRegister();
+    }
+  }, [getToken, token]);
 
   return (
     <div className="flex h-screen w-full flex-col items-start justify-start">

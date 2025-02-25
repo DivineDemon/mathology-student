@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
-import { ChevronDown, FileChartColumn, FileText, Loader2 } from "lucide-react";
+import {
+  BadgePercent,
+  ChevronDown,
+  FileChartColumn,
+  FileText,
+  Loader2,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 import Chart from "@/components/profile/chart";
@@ -74,9 +80,9 @@ const Profile = () => {
         </div>
       </nav>
       <div className="flex min-h-[calc(100vh-64px)] w-full flex-col items-start justify-start p-5">
-        <div className="flex w-full flex-col items-start justify-center gap-5 lg:h-1/2 lg:flex-row">
-          <div className="flex h-full w-full flex-row items-start justify-start gap-3 rounded-xl bg-white p-5 lg:w-1/2 lg:flex-col">
-            <div className="flex h-full w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
+        <div className="flex w-full flex-col items-start justify-center gap-5 lg:flex-row">
+          <div className="flex w-full flex-row items-start justify-start gap-3 rounded-xl bg-white p-5 lg:h-[300px] lg:w-1/2 lg:flex-col xl:h-[582.5px]">
+            <div className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
               <img
                 src="https://ui.shadcn.com/avatars/04.png"
                 className="size-16 shrink-0 rounded-xl border-2 border-white lg:size-16"
@@ -90,7 +96,7 @@ const Profile = () => {
                 </span>
               </div>
             </div>
-            <div className="flex h-full w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
+            <div className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
               <div className="flex size-16 shrink-0 items-center justify-center rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
                 <FileChartColumn className="size-full" />
               </div>
@@ -100,6 +106,19 @@ const Profile = () => {
                 </span>
                 <span className="lg:text-medium w-full text-left text-sm text-gray-400">
                   Attempt Questions
+                </span>
+              </div>
+            </div>
+            <div className="hidden h-full w-full flex-col items-center justify-center gap-5 rounded-xl bg-gray-100 xl:flex">
+              <div className="flex size-20 items-center justify-center rounded-full bg-primary/20 text-blue-600">
+                <BadgePercent className="size-10" />
+              </div>
+              <div className="flex w-full flex-col items-center justify-center">
+                <span className="w-full text-center text-3xl font-bold">
+                  65%
+                </span>
+                <span className="w-full text-center text-gray-500">
+                  Student Skill Metric
                 </span>
               </div>
             </div>
