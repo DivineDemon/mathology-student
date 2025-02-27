@@ -266,6 +266,7 @@ const Problems = () => {
                     onClick={() =>
                       navigate(`/question-attempt/${question.question_id}`)
                     }
+                    title={question.question_title}
                   >
                     <TableCell className="overflow-hidden truncate font-medium">
                       {truncateString(question.question_title, 10)}
