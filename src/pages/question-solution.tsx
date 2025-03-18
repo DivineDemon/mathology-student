@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { MathJax } from "better-react-mathjax";
-import { Calculator, Loader2, Upload, X } from "lucide-react";
+import {  Loader2, Upload, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -24,15 +24,20 @@ import {
   SheetDescription,
   SheetHeader,
 } from "@/components/ui/sheet";
+
+import Bot from "@/assets/img/bot.svg";
+import Calculator from "@/assets/img/calculator.svg"
+
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import WarningModal from "@/components/warning-modal";
+// import WarningModal from "@/components/warning-modal";
 import { cn, parseImage } from "@/lib/utils";
 import { usePostMathSolveMathMutation } from "@/store/services/math";
 import {
   useGetQuestionQuery,
-  useGetQuestionsQuery,
+  // useGetQuestionsQuery,
   usePostAttemptQuestionMutation,
 } from "@/store/services/question";
+import ChatBot from "@/components/chat-bot";
 
 const QuestionSolution = () => {
   const { id } = useParams();
@@ -40,12 +45,14 @@ const QuestionSolution = () => {
   const { getToken } = useKindeAuth();
   const canvasRef = useRef<any>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-  const [warn, setWarn] = useState<boolean>(false);
+  // const [warn, setWarn] = useState<boolean>(false);
   const [increaseAttempt, { isLoading: attempting }] =
     usePostAttemptQuestionMutation();
   const [token, setToken] = useState<string | null>(null);
-  const [movement, setMovement] = useState<string>("next");
+  // const [movement, setMovement] = useState<string>("next");
   const [calculate, setCalculate] = useState<boolean>(false);
+  const [chat, setChat] = useState<boolean>(false);
+
   const [canvasHeight, setCanvasHeight] = useState<number>(500);
   const [questionHeight, setQuestionHeight] = useState<number>(0);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
@@ -72,10 +79,10 @@ const QuestionSolution = () => {
     }
   );
 
-  const { data: questions } = useGetQuestionsQuery(`${token}`, {
-    skip: !token,
-    refetchOnMountOrArgChange: true,
-  });
+  // const { data: questions } = useGetQuestionsQuery(`${token}`, {
+  //   skip: !token,
+  //   refetchOnMountOrArgChange: true,
+  // });
 
   const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) {
@@ -160,23 +167,23 @@ const QuestionSolution = () => {
     }
   };
 
-  const handlePrevQuestion = () => {
-    const findIndex = questions!.findIndex(
-      (question) => question.question_id === Number(id)
-    );
-    navigate(
-      `/question-solution/${questions?.[Number(findIndex) - 1]?.question_id}`
-    );
-  };
+  // const handlePrevQuestion = () => {
+  //   const findIndex = questions!.findIndex(
+  //     (question) => question.question_id === Number(id)
+  //   );
+  //   navigate(
+  //     `/question-solution/${questions?.[Number(findIndex) - 1]?.question_id}`
+  //   );
+  // };
 
-  const handleNextQuestion = () => {
-    const findIndex = questions!.findIndex(
-      (question) => question.question_id === Number(id)
-    );
-    navigate(
-      `/question-solution/${questions?.[Number(findIndex) + 1]?.question_id}`
-    );
-  };
+  // const handleNextQuestion = () => {
+  //   const findIndex = questions!.findIndex(
+  //     (question) => question.question_id === Number(id)
+  //   );
+  //   navigate(
+  //     `/question-solution/${questions?.[Number(findIndex) + 1]?.question_id}`
+  //   );
+  // };
 
   useEffect(() => {
     handleToken();
@@ -199,6 +206,16 @@ const QuestionSolution = () => {
   ) : (
     <>
       <Sheet
+        open={chat}
+        onOpenChange={() => {
+          setChat(false);
+        }}
+      >
+        <SheetContent className="flex h-full w-full flex-col items-start justify-start p-0">
+          <ChatBot />
+        </SheetContent>
+      </Sheet>
+      <Sheet
         open={calculate}
         onOpenChange={() => {
           setCalculate(false);
@@ -212,7 +229,7 @@ const QuestionSolution = () => {
           </SheetHeader>
         </SheetContent>
       </Sheet>
-      <WarningModal
+      {/* <WarningModal
         open={warn}
         setOpen={setWarn}
         message={`move to the ${movement === "next" ? "next" : "previous"} question`}
@@ -223,7 +240,7 @@ const QuestionSolution = () => {
             handlePrevQuestion();
           }
         }}
-      />
+      /> */}
       <div className="flex h-screen w-full flex-col items-start justify-start">
         <nav className="flex h-16 w-full shrink-0 items-center justify-between border-b px-5 py-2.5">
           <div className="flex items-center justify-center gap-4">
@@ -232,9 +249,13 @@ const QuestionSolution = () => {
               {data?.question_type === "Practice" && "Practice"} Question
             </div>
           </div>
-          <button type="button" onClick={() => setCalculate(true)}>
-            <Calculator />
-          </button>
+          <div className="flex items-center justify-center gap-4">
+            <button type="button" onClick={() => setChat(true)}>
+              <img src={Bot} alt="" />
+            </button><button type="button" onClick={() => setCalculate(true)}>
+              <img src={Calculator} alt="" />
+            </button>
+          </div>
         </nav>
         <div className="flex h-[calc(100vh-64px)] w-full flex-col items-start justify-start gap-5 p-5">
           <Breadcrumb>
@@ -277,7 +298,7 @@ const QuestionSolution = () => {
                 </span>
               </span>
             </div>
-            <div className="relative flex h-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-primary bg-white p-3 lg:w-72 lg:flex-row lg:gap-5 lg:p-0">
+            <div className="relative  flex h-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-primary bg-white p-3 lg:w-72 lg:flex-row lg:gap-5 lg:p-0">
               {uploadedImage && (
                 <Button
                   type="button"
@@ -296,7 +317,7 @@ const QuestionSolution = () => {
                 accept="image/png, image/jpg, image/jpeg"
               />
               <Upload className="size-8 shrink-0 text-primary lg:size-10" />
-              <div className="flex flex-col items-center justify-center gap-1.5">
+              <div className="flex  flex-col items-center justify-center gap-1.5">
                 <Button
                   type="button"
                   variant="default"
@@ -346,7 +367,7 @@ const QuestionSolution = () => {
             </div>
           </div>
           <div className="flex w-full items-center justify-end gap-4">
-            <Button
+            {/* <Button
               type="button"
               variant="outline"
               disabled={isSolving || attempting}
@@ -367,7 +388,7 @@ const QuestionSolution = () => {
               }}
             >
               Next Question
-            </Button>
+            </Button> */}
             <Button
               type="button"
               variant="default"

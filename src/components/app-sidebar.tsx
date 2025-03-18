@@ -16,7 +16,7 @@ import { useGetUserQuery } from "@/store/services/auth";
 
 import { Button } from "./ui/button";
 import WarningModal from "./warning-modal";
-
+import Logo from "@/assets/img/logo.svg"
 const AppSidebar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -51,18 +51,18 @@ const AppSidebar = () => {
         message="Logout"
         cta={logout}
       />
-      <Sidebar className="border-r border-gray-300">
-        <SidebarHeader className="h-16 border-b border-gray-300 bg-gray-100 dark:bg-sidebar">
+      <Sidebar >
+        <SidebarHeader className="h-16 ">
           <div className="flex h-full w-full items-center justify-center gap-1.5">
             <span
               className="cursor-pointer text-left text-4xl font-bold text-primary dark:text-white"
               onClick={() => navigate("/")}
             >
-              Mathology
+            <img src={Logo} alt="" />
             </span>
           </div>
         </SidebarHeader>
-        <SidebarContent className="flex w-full flex-col items-center justify-start bg-gray-100 p-2.5 dark:bg-sidebar">
+        <SidebarContent className="flex w-full flex-col items-center justify-start p-2.5 dark:bg-sidebar">
           {items.map((item, idx) => (
             <Link
               to={item.url}
@@ -87,7 +87,7 @@ const AppSidebar = () => {
             </Link>
           ))}
         </SidebarContent>
-        <SidebarFooter className="w-full border-t border-gray-300 bg-gray-100 pt-2.5 dark:bg-sidebar">
+        <SidebarFooter className="w-full pt-2.5 dark:bg-sidebar">
           <div className="flex w-full items-center justify-center gap-2.5">
             <img
               src={

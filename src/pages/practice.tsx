@@ -26,6 +26,7 @@ import {
 import { cn, truncateString } from "@/lib/utils";
 import { useGetQuestionsQuery } from "@/store/services/question";
 import { useGetStandardsQuery } from "@/store/services/standard";
+import Modal from "@/components/modal-prctice";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -33,13 +34,18 @@ const Practice = () => {
   const navigate = useNavigate();
   const { getToken } = useKindeAuth();
   const [token, setToken] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(
     null
   );
-  const [selectedStandard, setSelectedStandard] = useState<string | null>(null);
 
+  const [selectedStandard, setSelectedStandard] = useState<string | null>(null);
+ const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+ 
   const { data, isLoading } = useGetQuestionsQuery(`${token}`, {
     skip: !token,
     refetchOnMountOrArgChange: true,
@@ -130,6 +136,7 @@ const Practice = () => {
       );
     });
   };
+ 
 
   useEffect(() => {
     handleToken();
@@ -143,8 +150,16 @@ const Practice = () => {
           <div className="text-3xl font-bold lg:text-4xl">
             Practice Questions
           </div>
+        
         </div>
-        <div className="flex items-center justify-center rounded-lg border border-primary/20 bg-white pl-2.5">
+        <Modal isOpen={isModalOpen} onClose={closeModal} title="Start Practice">
+        <div className="mt-4 flex justify-end gap-2">
+          <Button>Start</Button>
+        </div>
+      </Modal>
+
+       <div className="flex gap-4">
+       <div className="flex items-center justify-center rounded-lg border border-primary/20 bg-white pl-2.5">
           <Search className="text-primary" />
           <Input
             type="text"
@@ -153,7 +168,12 @@ const Practice = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="border-none bg-transparent shadow-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
           />
+           
         </div>
+        <div className="relative">
+          <Button onClick={openModal}>Start Practice</Button>
+        </div>
+       </div>
       </nav>
       {isLoading ? (
         <div className="flex h-full w-full items-center justify-center">

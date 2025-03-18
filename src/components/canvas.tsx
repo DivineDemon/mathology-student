@@ -5,7 +5,9 @@ import React, {
   useRef,
   useState,
 } from "react";
-
+import Pen from "@/assets/img/pen.svg";
+import Refresh from "@/assets/img/refresh.svg";
+import Eraser from "@/assets/img/eraser.svg"
 import { KonvaEventObject } from "konva/lib/Node";
 import { Layer, Line, Stage } from "react-konva";
 
@@ -137,16 +139,16 @@ const Canvas = forwardRef(({ width, height }: CanvasProps, ref) => {
     <div className="flex h-full w-full flex-col items-start justify-start gap-5">
       <div className="flex w-full items-center justify-start gap-4">
         <button
-          className={`rounded px-4 py-2 ${tool === "pen" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+          className={`rounded-lg px-2 py-2 ${tool === "pen" ? "bg-blue-200 " : "bg-gray-200"}`}
           onClick={() => handleToolChange("pen")}
         >
-          Pen
+        <img src={Pen} alt="" />
         </button>
         <button
-          className={`rounded px-4 py-2 ${tool === "eraser" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+          className={`rounded-lg px-3 py-3 ${tool === "eraser" ? "bg-blue-200 text-white" : "bg-gray-200"}`}
           onClick={() => handleToolChange("eraser")}
         >
-          Eraser
+         <img src={Eraser} alt="" />
         </button>
         <div className="flex items-center gap-2">
           <label>Pen/Eraser Size: </label>
@@ -161,11 +163,11 @@ const Canvas = forwardRef(({ width, height }: CanvasProps, ref) => {
           <span>{strokeWidth}px</span>
         </div>
         <button
-          className="rounded bg-gray-200 px-4 py-2"
+          className="rounded-lg bg-gray-200 px-2 py-2"
           onClick={handleUndo}
           disabled={lines.length === 0 && history.length === 0}
         >
-          Undo
+          <img src={Refresh} alt="" />
         </button>
       </div>
       <div className="h-full w-full">
