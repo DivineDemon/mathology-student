@@ -280,26 +280,24 @@ const Problems = () => {
                     <TableCell className="text-center">
                       {question.standard_title}
                     </TableCell>
-                    <TableCell
-                     
-                    >
-                     <div className="flex w-full items-center justify-center">
-                          <div
-                            className={cn(
-                              "w-fit text-center font-semibold capitalize",
-                              {
-                                "rounded-lg bg-green-200 px-2 py-0.5 text-green-700":
-                                  question.difficulty_level === "easy",
-                                "rounded-lg bg-[#FEEBC8] px-2 py-0.5 text-yellow-700":
-                                  question.difficulty_level === "medium",
-                                "rounded-lg bg-red-200 px-2 py-0.5 text-red-700":
-                                  question.difficulty_level === "hard",
-                              }
-                            )}
-                          >
-                            {question.difficulty_level}
-                          </div>
+                    <TableCell>
+                      <div className="flex w-full items-center justify-center">
+                        <div
+                          className={cn(
+                            "w-fit text-center font-semibold capitalize",
+                            {
+                              "rounded-lg bg-green-200 px-2 py-0.5 text-green-700":
+                                question.difficulty_level === "easy",
+                              "rounded-lg bg-[#FEEBC8] px-2 py-0.5 text-yellow-700":
+                                question.difficulty_level === "medium",
+                              "rounded-lg bg-red-200 px-2 py-0.5 text-red-700":
+                                question.difficulty_level === "hard",
+                            }
+                          )}
+                        >
+                          {question.difficulty_level}
                         </div>
+                      </div>
                     </TableCell>
                     <TableCell
                       className={cn(

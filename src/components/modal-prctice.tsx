@@ -1,26 +1,114 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { CircleAlert, X } from "lucide-react";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
+import { CircleAlert, Loader2, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
+import { useGetCoursesQuery } from "@/store/services/course";
+import { useGetPracticeQuestionsMutation } from "@/store/services/question";
+
+import CustomToast from "./custom-toast";
+import { Button } from "./ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  children: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
-  if (!isOpen) return null;
-  const [selectedOption, setSelectedOption] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState("");
-  const [selectedQuestions, setSelectedQuestions] = useState("");
-  const [selectedDifficulty, setSelectedDifficulty] = useState("");
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title }) => {
+  const navigate = useNavigate();
+  const { getToken } = useKindeAuth();
+  const [getPracticeQuestions, { isLoading }] =
+    useGetPracticeQuestionsMutation();
+  const [option, setOption] = useState<string>("");
+  const [difficulty, setDifficulty] = useState<string>("");
+  const [token, setToken] = useState<string | undefined>(undefined);
+  const [numberQuestions, setNumberQuestions] = useState<string>("");
+  const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
 
-  const handleOptionChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
-    setSelectedOption(event.target.value);
+  const { data: courses } = useGetCoursesQuery(`${token}`, {
+    skip: !token,
+    refetchOnMountOrArgChange: true,
+  });
+
+  const handleToken = async () => {
+    let temp: string | undefined = "";
+
+    if (getToken) {
+      temp = await getToken();
+    }
+
+    setToken(temp);
   };
+
+  const handleSelectChange = (e: string) => {
+    if (selectedCourses.includes(e)) {
+      toast.custom(() => (
+        <CustomToast
+          type="error"
+          title="Error"
+          description="Item Already Selected!"
+        />
+      ));
+
+      return;
+    }
+
+    setSelectedCourses([...selectedCourses, e]);
+  };
+
+  const getQuestions = async () => {
+    try {
+      const response = await getPracticeQuestions({
+        token: token as string,
+        body: {
+          course_id: courses?.filter(
+            (course) => course.course_title === selectedCourses[0]
+          )[0].course_id as number,
+          difficulty_level: difficulty.toLowerCase(),
+          // @ts-ignore
+          limit: Number(numberQuestions),
+        },
+      });
+
+      if (response.data) {
+        localStorage.setItem("questions", JSON.stringify(response.data));
+        navigate(`/question-attempt/${response.data[0].question_id}`);
+      } else {
+        toast.custom(() => (
+          <CustomToast
+            type="error"
+            title="Error"
+            description="Something went wrong!"
+          />
+        ));
+      }
+    } catch (error: Error | unknown) {
+      toast.custom(() => (
+        <CustomToast
+          type="error"
+          title="Error"
+          description={(error as Error).message}
+        />
+      ));
+    }
+  };
+
+  useEffect(() => {
+    handleToken();
+  }, [getToken]);
+
+  if (!isOpen) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="relative w-full max-w-lg rounded-3xl bg-white p-10">
@@ -37,82 +125,101 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
           <CircleAlert fill="black" className="ml-4 size-6 text-white" />
         </div>
         <div className="mt-4 flex flex-col space-y-4">
-          {/* Radio buttons */}
           <div>
             <input
               type="radio"
               id="option1"
               name="options"
-              value="option1"
-              checked={selectedOption === "option1"}
-              onChange={handleOptionChange}
+              value="fixed"
+              onChange={(e) => setOption(e.target.value)}
             />
             <label htmlFor="option1" className="ml-2 font-bold">
               Fixed number of questions
             </label>
             <p className="ml-5 text-sm text-gray-400">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Choose the course, number of questions, and difficulty level.
             </p>
           </div>
           <div className="flex flex-col">
-            {/* Radio buttons */}
-
             <div className="ml-4 grid grid-cols-2 gap-2">
               <div className="col-span-2">
                 <label htmlFor="course-select" className="font-semibold">
                   Select Course
                 </label>
-                <select
-                  id="course-select"
-                  className="block w-full rounded-lg border border-gray-300 bg-muted p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                  disabled={selectedOption !== "option1"}
-                  value={selectedCourse}
-                  onChange={(e) => setSelectedCourse(e.target.value)}
+                <Select
+                  disabled={option === "say"}
+                  onValueChange={handleSelectChange}
                 >
-                  <option value="">--Select a Course--</option>
-                  <option value="course1">Course 1</option>
-                  <option value="course2">Course 2</option>
-                  <option value="course3">Course 3</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select Course" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {courses?.map((course) => (
+                      <SelectItem
+                        key={course.course_id}
+                        value={course.course_title}
+                      >
+                        {course.course_title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="no-scrollbar col-span-2 flex w-full max-w-full items-start justify-start gap-2 overflow-x-auto">
+                {selectedCourses.map((course, idx) => (
+                  <span
+                    key={idx}
+                    className="w-24 shrink-0 overflow-hidden truncate rounded-md bg-gray-100 px-4 py-1 text-xs"
+                  >
+                    {course}
+                  </span>
+                ))}
               </div>
               <div className="col-span-1">
                 <label htmlFor="questions-select" className="font-semibold">
                   No. of Questions
                 </label>
-                <select
-                  id="questions-select"
-                  className="block w-full rounded-lg border border-gray-300 bg-muted p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                  disabled={selectedOption !== "option1"}
-                  value={selectedQuestions}
-                  onChange={(e) => setSelectedQuestions(e.target.value)}
+                <Select
+                  disabled={option === "say"}
+                  value={numberQuestions}
+                  onValueChange={setNumberQuestions}
                 >
-                  <option value="">--Select Number--</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="30">30</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="No. of Questions" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {["10", "20", "30"].map((amt) => (
+                      <SelectItem key={amt} value={amt}>
+                        {amt}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="col-span-1">
                 <label htmlFor="difficulty-select" className="font-semibold">
                   Difficulty Level
                 </label>
-                <select
-                  id="difficulty-select"
-                  className="block w-full rounded-lg border border-gray-300 bg-muted p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                  disabled={selectedOption !== "option1"}
-                  value={selectedDifficulty}
-                  onChange={(e) => setSelectedDifficulty(e.target.value)}
+                <Select
+                  disabled={option === "say"}
+                  value={difficulty}
+                  onValueChange={setDifficulty}
                 >
-                  <option value="">--Select Difficulty--</option>
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="No. of Questions" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {["Easy", "Medium", "Hard"].map((level) => (
+                      <SelectItem key={level} value={level}>
+                        {level}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
-          <div className="!mt-8">
+          {/* <div className="!mt-8">
             <input
               type="radio"
               id="option2"
@@ -128,16 +235,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </p>
-          </div>
-
+          </div> */}
           <div>
             <input
               type="radio"
               id="option3"
               name="options"
-              value="option3"
-              checked={selectedOption === "option3"}
-              onChange={handleOptionChange}
+              value="say"
+              onChange={(e) => setOption(e.target.value)}
             />
             <label htmlFor="option3" className="ml-2 font-bold">
               Keep going until
@@ -145,7 +250,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
             <p className="ml-5 text-sm text-gray-400">I say</p>
           </div>
         </div>
-        <div>{children}</div>
+        <div className="mt-4 flex justify-end gap-2">
+          <Button type="button" onClick={getQuestions} disabled={isLoading}>
+            {isLoading ? <Loader2 className="animate-spin" /> : "Start"}
+          </Button>
+        </div>
       </div>
     </div>
   );

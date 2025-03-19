@@ -184,3 +184,9 @@ declare type Stats = {
   date: string;
   count: number;
 };
+
+declare type PracticeSelection = {
+  course_id: number;
+  difficulty_level: string;
+  limit: number;
+};

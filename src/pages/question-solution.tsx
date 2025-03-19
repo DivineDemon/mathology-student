@@ -2,11 +2,14 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { MathJax } from "better-react-mathjax";
-import {  Loader2, Upload, X } from "lucide-react";
+import { Loader2, Upload, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
+import Bot from "@/assets/img/bot.svg";
+import Calculator from "@/assets/img/calculator.svg";
 import Canvas from "@/components/canvas";
+import ChatBot from "@/components/chat-bot";
 import CustomToast from "@/components/custom-toast";
 import {
   Breadcrumb,
@@ -24,10 +27,6 @@ import {
   SheetDescription,
   SheetHeader,
 } from "@/components/ui/sheet";
-
-import Bot from "@/assets/img/bot.svg";
-import Calculator from "@/assets/img/calculator.svg"
-
 import { SidebarTrigger } from "@/components/ui/sidebar";
 // import WarningModal from "@/components/warning-modal";
 import { cn, parseImage } from "@/lib/utils";
@@ -37,7 +36,6 @@ import {
   // useGetQuestionsQuery,
   usePostAttemptQuestionMutation,
 } from "@/store/services/question";
-import ChatBot from "@/components/chat-bot";
 
 const QuestionSolution = () => {
   const { id } = useParams();
@@ -252,7 +250,8 @@ const QuestionSolution = () => {
           <div className="flex items-center justify-center gap-4">
             <button type="button" onClick={() => setChat(true)}>
               <img src={Bot} alt="" />
-            </button><button type="button" onClick={() => setCalculate(true)}>
+            </button>
+            <button type="button" onClick={() => setCalculate(true)}>
               <img src={Calculator} alt="" />
             </button>
           </div>
@@ -298,7 +297,7 @@ const QuestionSolution = () => {
                 </span>
               </span>
             </div>
-            <div className="relative  flex h-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-primary bg-white p-3 lg:w-72 lg:flex-row lg:gap-5 lg:p-0">
+            <div className="relative flex h-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-primary bg-white p-3 lg:w-72 lg:flex-row lg:gap-5 lg:p-0">
               {uploadedImage && (
                 <Button
                   type="button"
@@ -317,7 +316,7 @@ const QuestionSolution = () => {
                 accept="image/png, image/jpg, image/jpeg"
               />
               <Upload className="size-8 shrink-0 text-primary lg:size-10" />
-              <div className="flex  flex-col items-center justify-center gap-1.5">
+              <div className="flex flex-col items-center justify-center gap-1.5">
                 <Button
                   type="button"
                   variant="default"

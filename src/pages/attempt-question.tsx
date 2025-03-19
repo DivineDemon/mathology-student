@@ -4,6 +4,9 @@ import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { MathJax } from "better-react-mathjax";
 import { Loader2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+
+import Bot from "@/assets/img/bot.svg";
+import Calculator from "@/assets/img/calculator.svg";
 import ChatBot from "@/components/chat-bot";
 import {
   Breadcrumb,
@@ -20,10 +23,7 @@ import {
   SheetContent,
   SheetDescription,
   SheetHeader,
-
 } from "@/components/ui/sheet";
-import Bot from "@/assets/img/bot.svg";
-import Calculator from "@/assets/img/calculator.svg"
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { useGetQuestionQuery } from "@/store/services/question";
@@ -107,7 +107,8 @@ const AttemptQuestion = () => {
           <div className="flex items-center justify-center gap-4">
             <button type="button" onClick={() => setChat(true)}>
               <img src={Bot} alt="" />
-            </button><button type="button" onClick={() => setCalculate(true)}>
+            </button>
+            <button type="button" onClick={() => setCalculate(true)}>
               <img src={Calculator} alt="" />
             </button>
           </div>

@@ -4,6 +4,7 @@ import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { CirclePower } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import Logo from "@/assets/img/logo.svg";
 import {
   Sidebar,
   SidebarContent,
@@ -16,7 +17,7 @@ import { useGetUserQuery } from "@/store/services/auth";
 
 import { Button } from "./ui/button";
 import WarningModal from "./warning-modal";
-import Logo from "@/assets/img/logo.svg"
+
 const AppSidebar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -51,14 +52,14 @@ const AppSidebar = () => {
         message="Logout"
         cta={logout}
       />
-      <Sidebar >
-        <SidebarHeader className="h-16 ">
+      <Sidebar>
+        <SidebarHeader className="h-16">
           <div className="flex h-full w-full items-center justify-center gap-1.5">
             <span
               className="cursor-pointer text-left text-4xl font-bold text-primary dark:text-white"
               onClick={() => navigate("/")}
             >
-            <img src={Logo} alt="" />
+              <img src={Logo} alt="" />
             </span>
           </div>
         </SidebarHeader>

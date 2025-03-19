@@ -3,9 +3,12 @@ import { api } from "./core";
 export const courseApi = api.injectEndpoints({
   endpoints: (build) => ({
     getCourses: build.query({
-      query: () => ({
+      query: (token: string) => ({
         url: `/courses/`,
         method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }),
       providesTags: ["courses"],
       transformResponse: (response: GetCourses) => response.courses,

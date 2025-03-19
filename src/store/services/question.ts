@@ -72,6 +72,15 @@ export const standardApi = api.injectEndpoints({
         total_attempts: number;
       }) => response.total_attempts,
     }),
+    getPracticeQuestions: builder.mutation({
+      query: ({ token, body }: { token: string; body: PracticeSelection }) => ({
+        url: `/questions/start-practice/?course_id=${body.course_id}&difficulty_level=${body.difficulty_level}&limit=${body.limit}`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 });
 export const {
@@ -80,4 +89,5 @@ export const {
   usePostQuestionsQuery,
   useGetQuestionAttemptsQuery,
   usePostAttemptQuestionMutation,
+  useGetPracticeQuestionsMutation,
 } = standardApi;
