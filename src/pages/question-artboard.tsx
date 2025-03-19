@@ -4,7 +4,9 @@ import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { MathJax } from "better-react-mathjax";
 import { Check, Loader2, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
+import CustomToast from "@/components/custom-toast";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,30 +18,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import {
-  useGetQuestionAttemptsQuery,
-  useGetQuestionQuery,
-} from "@/store/services/question";
+import { usePostMathSolutionMutation } from "@/store/services/math";
+import { useGetQuestionQuery } from "@/store/services/question";
 
 const QuestionArtboard = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { getToken } = useKindeAuth();
+  const [aiSolution, setAiSolution] = useState<{
+    solution_explain: string;
+    solution_file_text: string;
+  } | null>(null);
   const [reveal, setReveal] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
+  const [getAISolution, { isLoading }] = usePostMathSolutionMutation();
   const [submittedSolution, setSubmittedSolution] = useState<string>("");
-
-  const { data: attempts } = useGetQuestionAttemptsQuery(
-    {
-      id: Number(id),
-      token: `${token}`,
-    },
-    {
-      skip: !id || !token,
-      refetchOnMountOrArgChange: true,
-    }
-  );
 
   const handleToken = async () => {
     let test: string | undefined = "";
@@ -73,13 +67,51 @@ const QuestionArtboard = () => {
     }
   );
 
+  const getSolution = async () => {
+    try {
+      const response = await getAISolution({
+        token: token as string,
+        // @ts-ignore
+        question_id: Number(id),
+        query:
+          "Give me the Solution to this math problem, detailed with all steps visualized.",
+      });
+
+      if (response.data) {
+        setReveal(false);
+        setAiSolution(response.data);
+      } else {
+        toast.custom(() => (
+          <CustomToast
+            type="error"
+            title="Error"
+            description="Something went wrong!"
+          />
+        ));
+      }
+    } catch (error: Error | unknown) {
+      toast.custom(() => (
+        <CustomToast
+          type="error"
+          title="Error"
+          description={(error as Error).message}
+        />
+      ));
+    }
+  };
+
   useEffect(() => {
     handleToken();
 
-    const userSolution: {
-      status: string;
-      solution: string;
-    } = JSON.parse(localStorage.getItem("solution")!);
+    // const userSolution: {
+    //   status: string;
+    //   solution: string;
+    // } = JSON.parse(localStorage.getItem("solution")!);
+
+    const userSolution = {
+      status: "Correct",
+      solution: "Solution",
+    };
 
     if (userSolution.status === "Correct") {
       setIsCorrect(true);
@@ -156,43 +188,54 @@ const QuestionArtboard = () => {
                 {isCorrect ? "Correct" : "Incorrect"}
               </h1>
             </div>
-            <div className="flex h-full max-h-full w-full flex-col items-start justify-start overflow-y-auto p-5">
+            <div className="flex h-full w-full flex-col items-start justify-start gap-2.5 p-5">
               <img src={submittedSolution} alt="solution" className="w-full" />
-              {reveal && (
-                <p className="h-full w-full text-left">
+              {aiSolution ? (
+                <p className="h-[384px] w-full overflow-y-auto text-left">
+                  <span>
+                    {aiSolution.solution_file_text}
+                    <br />
+                    {aiSolution.solution_explain}
+                  </span>
+                </p>
+              ) : reveal ? (
+                <p className="h-[384px] w-full overflow-y-auto text-left">
                   {question?.solution_file}
                 </p>
+              ) : (
+                <div className="h-[384px]" />
               )}
+              <div className="flex w-full items-center justify-center gap-2">
+                <Button
+                  onClick={() => setReveal(!reveal)}
+                  type="button"
+                  variant="outline"
+                >
+                  {reveal ? "Hide Solution" : "Reveal Solution"}
+                </Button>
+                <Button
+                  onClick={getSolution}
+                  type="button"
+                  variant="default"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Explanation by AI"
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
         <div className="flex w-full items-center justify-end gap-4 pb-5">
-          {attempts && attempts < 2 ? (
-            <Button
-              onClick={() => navigate(-1)}
-              type="button"
-              variant="outline"
-            >
-              Retry
-            </Button>
-          ) : (
-            <>
-              <Button
-                onClick={() => setReveal(!reveal)}
-                type="button"
-                variant="outline"
-              >
-                {reveal ? "Hide Solution" : "Reveal Solution"}
-              </Button>
-              <Button
-                type="button"
-                variant="default"
-                onClick={() => navigate(-1)}
-              >
-                Back
-              </Button>
-            </>
-          )}
+          <Button onClick={() => navigate(-1)} type="button" variant="outline">
+            Retry
+          </Button>
+          <Button type="button" variant="default" onClick={() => navigate(-1)}>
+            Back
+          </Button>
         </div>
       </div>
     </div>
