@@ -172,7 +172,7 @@ const QuestionArtboard = () => {
               <MathJax>{data?.question_title}</MathJax>
             </div>
           </div>
-          <div className="col-span-1 flex h-[568px] w-full flex-col items-start justify-start overflow-x-auto rounded-xl bg-white shadow-md xl:h-full">
+          <div className="col-span-1 flex h-full w-full flex-col items-start justify-start overflow-x-auto rounded-xl bg-white shadow-md xl:h-[calc(100vh-190px)]">
             <div
               className={cn("flex w-full items-center gap-2 rounded-t-xl p-4", {
                 "bg-destructive": !isCorrect,
@@ -188,10 +188,10 @@ const QuestionArtboard = () => {
                 {isCorrect ? "Correct" : "Incorrect"}
               </h1>
             </div>
-            <div className="flex h-full w-full flex-col items-start justify-start gap-2.5 p-5">
+            <div className="flex h-[calc(100vh-240px)] w-full flex-col items-start justify-start gap-2.5 p-5">
               <img src={submittedSolution} alt="solution" className="w-full" />
               {aiSolution ? (
-                <p className="h-[384px] w-full overflow-y-auto text-left">
+                <p className="h-full w-full overflow-y-auto text-left">
                   <span>
                     {aiSolution.solution_file_text}
                     <br />
@@ -199,11 +199,11 @@ const QuestionArtboard = () => {
                   </span>
                 </p>
               ) : reveal ? (
-                <p className="h-[384px] w-full overflow-y-auto text-left">
+                <p className="h-full w-full overflow-y-auto text-left">
                   {question?.solution_file}
                 </p>
               ) : (
-                <div className="h-[384px]" />
+                <div className="h-full" />
               )}
               <div className="flex w-full items-center justify-center gap-2">
                 <Button
@@ -230,12 +230,12 @@ const QuestionArtboard = () => {
           </div>
         </div>
         <div className="flex w-full items-center justify-end gap-4 pb-5">
-          <Button onClick={() => navigate(-1)} type="button" variant="outline">
-            Retry
+          <Button onClick={() => navigate(-1)} type="button" variant="default">
+            Try Again
           </Button>
-          <Button type="button" variant="default" onClick={() => navigate(-1)}>
+          {/* <Button type="button" variant="default" onClick={() => navigate(-1)}>
             Back
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>
