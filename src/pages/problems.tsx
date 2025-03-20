@@ -157,6 +157,9 @@ const Problems = () => {
     if (token) {
       handleUserRegister();
     }
+
+    localStorage.removeItem("option");
+    localStorage.removeItem("questions");
   }, [getToken, token]);
 
   return (

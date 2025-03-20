@@ -7,11 +7,12 @@ import {
   FileChartColumn,
   FileText,
   Loader2,
-  Pen,
   PencilLine,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
+import CustomToast from "@/components/custom-toast";
 import Chart from "@/components/profile/chart";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -25,15 +26,17 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { useGetUserQuery, useUpdateUserMutation } from "@/store/services/auth";
 import { useGetQuestionsQuery } from "@/store/services/question";
-import { useGetTotalAttemptsQuery, useGetUserStatisticsQuery, useGetUserStatisticsSkillsQuery } from "@/store/services/statistics";
-import { toast } from "sonner";
-import CustomToast from "@/components/custom-toast";
+import {
+  useGetTotalAttemptsQuery,
+  useGetUserStatisticsQuery,
+  useGetUserStatisticsSkillsQuery,
+} from "@/store/services/statistics";
 
 const Profile = () => {
   const { getToken } = useKindeAuth();
   const [period, setPeriod] = useState("weekly");
   const [token, setToken] = useState<string | null>(null);
-  const [name, setName] = useState("")
+  const [name, setName] = useState("");
   const handleToken = async () => {
     let test: string | undefined = "";
 
@@ -44,49 +47,45 @@ const Profile = () => {
     setToken(test ?? "");
   };
 
-  const [updateUser, { isLoading }
-  ] = useUpdateUserMutation();
+  const [updateUser, { isLoading }] = useUpdateUserMutation();
 
   const handleUpdate = async () => {
     const response = await updateUser({
       token: token as string,
       body: {
         name,
-      }
-    })
+      },
+    });
 
-    if(response){
-      toast.custom(()=>(
+    if (response) {
+      toast.custom(() => (
         <CustomToast
           title="Success"
           description="Profile updated successfully"
           type="success"
         />
-      ))
-
-    }
-    else{
-      toast.custom(()=>(
+      ));
+    } else {
+      toast.custom(() => (
         <CustomToast
           title="error"
           description="Profile update Failed"
           type="error"
         />
-      ))
+      ));
     }
-  }
+  };
 
   const { data: attempt } = useGetTotalAttemptsQuery(`${token}`, {
     skip: !token,
-    refetchOnMountOrArgChange: true
-  })
+    refetchOnMountOrArgChange: true,
+  });
 
-  const { data: skill, isLoading: skillLoading } = useGetUserStatisticsSkillsQuery(`${token}`, {
-    skip: !token,
-    refetchOnMountOrArgChange: true
-  })
-
-
+  const { data: skill, isLoading: skillLoading } =
+    useGetUserStatisticsSkillsQuery(`${token}`, {
+      skip: !token,
+      refetchOnMountOrArgChange: true,
+    });
 
   const { data } = useGetQuestionsQuery(`${token}`, {
     skip: !token,
@@ -112,7 +111,7 @@ const Profile = () => {
   useEffect(() => {
     handleToken();
     if (user) {
-      setName(user.name)
+      setName(user.name);
     }
   }, [getToken, user]);
 
@@ -132,25 +131,37 @@ const Profile = () => {
       </nav>
       <div className="flex min-h-[calc(100vh-64px)] w-full flex-col items-start justify-start p-5">
         <div className="flex w-full flex-col items-start justify-center gap-5 lg:flex-row">
-          <div className="flex w-full flex-row items-start justify-start gap-3 rounded-xl bg-white p-5  lg:w-1/2 lg:flex-col ">
+          <div className="flex w-full flex-row items-start justify-start gap-3 rounded-xl bg-white p-5 lg:w-1/2 lg:flex-col">
             <div className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
               <img
                 src="https://ui.shadcn.com/avatars/04.png"
                 className="size-16 shrink-0 rounded-xl border-2 border-white lg:size-16"
               />
               <div className="flex flex-1 flex-col items-start justify-start">
-                <div className="flex justify-between w-full">
-                  <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="text-sm rounded-md px-2 py-0.5" />
-                  <button disabled={isLoading} onClick={handleUpdate}>  {isLoading ? <Loader2 className=" animate-spin text-primary" /> : <PencilLine />}</button>
+                <div className="flex w-full justify-between">
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="rounded-md px-2 py-0.5 text-sm"
+                  />
+                  <button disabled={isLoading} onClick={handleUpdate}>
+                    {" "}
+                    {isLoading ? (
+                      <Loader2 className="animate-spin text-primary" />
+                    ) : (
+                      <PencilLine />
+                    )}
+                  </button>
                 </div>
                 <span className="lg:text-medium w-full text-left text-gray-400 md:text-sm">
                   {user?.designation || "Creator"}
                 </span>
               </div>
             </div>
-            <div className="flex gap-5 w-full">
-              <div className="flex flex-col w-full items-start justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
-                <div className="flex  size-16 shrink-0 items-start   justify-start rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
+            <div className="flex w-full gap-5">
+              <div className="flex w-full flex-col items-start justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
+                <div className="flex size-16 shrink-0 items-start justify-start rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
                   <FileChartColumn className="size-full" />
                 </div>
                 <div className="flex flex-1 flex-col items-center justify-center">
@@ -162,13 +173,19 @@ const Profile = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex flex-col w-full items-start justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
-                <div className="flex  size-20 shrink-0 items-center   justify-center rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
+              <div className="flex w-full flex-col items-start justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
+                <div className="flex size-20 shrink-0 items-center justify-center rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
                   <BadgePercent className="size-10" />
                 </div>
                 <div className="flex w-full flex-col items-start justify-center">
                   <span className="w-full text-start text-3xl font-bold">
-                    {skillLoading ? <Loader2 className="size-16 animate-spin text-primary" /> : <>{skill?.skill_level} <span>%</span></>}
+                    {skillLoading ? (
+                      <Loader2 className="size-16 animate-spin text-primary" />
+                    ) : (
+                      <>
+                        {skill?.skill_level} <span>%</span>
+                      </>
+                    )}
                   </span>
                   <span className="w-full text-start text-gray-500">
                     Student Skill Metric

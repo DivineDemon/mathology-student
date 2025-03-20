@@ -33,6 +33,7 @@ import { cn } from "@/lib/utils";
 import { usePostMathSolveMathMutation } from "@/store/services/math";
 import {
   useGetQuestionQuery,
+  useGetQuestionsQuery,
   // useGetQuestionsQuery,
   usePostAttemptQuestionMutation,
 } from "@/store/services/question";
@@ -77,10 +78,10 @@ const QuestionSolution = () => {
     }
   );
 
-  // const { data: questions } = useGetQuestionsQuery(`${token}`, {
-  //   skip: !token,
-  //   refetchOnMountOrArgChange: true,
-  // });
+  const { data: questions } = useGetQuestionsQuery(`${token}`, {
+    skip: !token,
+    refetchOnMountOrArgChange: true,
+  });
 
   const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) {
@@ -143,24 +144,35 @@ const QuestionSolution = () => {
 
     if (!response?.error) {
       if ((response?.data as string) === "Correct") {
-        // @ts-ignore
-        const qList = JSON.parse(localStorage.getItem("questions") || []);
+        const option = localStorage.getItem("option");
 
-        if (Array.isArray(qList) && qList.length < 2) {
-          navigate("/practices");
-        } else {
-          const findIndex = qList!.findIndex(
-            (question: {
-              question_id: number;
-              question_title: string;
-              question_description: string;
-              skill_tags: string[];
-            }) => question.question_id === Number(id)
+        if (option === "say") {
+          const findIndex = questions!.findIndex(
+            (question) => question.question_id === Number(id)
           );
-
           navigate(
-            `/question-solution/${qList?.[Number(findIndex) + 1]?.question_id}`
+            `/question-solution/${questions?.[Number(findIndex) + 1]?.question_id}`
           );
+        } else {
+          // @ts-ignore
+          const qList = JSON.parse(localStorage.getItem("questions") || []);
+
+          if (Array.isArray(qList) && qList.length < 2) {
+            navigate("/practices");
+          } else {
+            const findIndex = qList!.findIndex(
+              (question: {
+                question_id: number;
+                question_title: string;
+                question_description: string;
+                skill_tags: string[];
+              }) => question.question_id === Number(id)
+            );
+
+            navigate(
+              `/question-solution/${qList?.[Number(findIndex) + 1]?.question_id}`
+            );
+          }
         }
       } else {
         localStorage.setItem(
@@ -378,7 +390,7 @@ const QuestionSolution = () => {
                 backgroundColor: "#ffffff",
               }}
             />
-            <div className="absolute grid grid-cols-2 z-[1]  h-full w-full flex-col items-start justify-start gap-5 rounded-xl p-5">
+            <div className="absolute z-[1] grid h-full w-full grid-cols-2 flex-col items-start justify-start gap-5 rounded-xl p-5">
               <div>
                 <div id="question-text">
                   <MathJax>{data?.question_title}</MathJax>
@@ -391,11 +403,15 @@ const QuestionSolution = () => {
                     {/* @ts-ignore */}
 
                     <Canvas ref={canvasRef} />
-
                   </div>
                 )}
               </div>
-              <div> <img src={data?.image_url} className="size-72 ml-auto" /></div>
+              {data?.image_url.includes("https") && (
+                <div>
+                  <img src={data?.image_url} className="ml-auto size-72" />
+                  <span>{data?.image_url}</span>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex w-full items-center justify-end gap-4">

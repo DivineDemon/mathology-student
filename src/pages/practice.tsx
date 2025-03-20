@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { ChevronLeft, ChevronRight, Loader2, Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+
+// import { useNavigate } from "react-router-dom";
 
 // import Sort from "@/assets/img/sort.svg";
 import Modal from "@/components/modal-prctice";
@@ -31,7 +32,7 @@ import { useGetStandardsQuery } from "@/store/services/standard";
 const ITEMS_PER_PAGE = 10;
 
 const Practice = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { getToken } = useKindeAuth();
   const [token, setToken] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -265,12 +266,12 @@ const Practice = () => {
                 {currentData?.map((question, index) => (
                   <TableRow
                     key={index}
-                    className={cn("cursor-pointer bg-gray-100", {
+                    className={cn("bg-gray-100", {
                       "bg-white": index % 2 === 0,
                     })}
-                    onClick={() =>
-                      navigate(`/question-attempt/${question.question_id}`)
-                    }
+                    // onClick={() =>
+                    //   navigate(`/question-attempt/${question.question_id}`)
+                    // }
                     title={question.question_title}
                   >
                     <TableCell className="font-medium">

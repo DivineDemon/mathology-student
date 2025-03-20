@@ -6,7 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import { useGetCoursesQuery } from "@/store/services/course";
-import { useGetPracticeQuestionsMutation } from "@/store/services/question";
+import {
+  useGetPracticeQuestionsMutation,
+  useGetQuestionsQuery,
+} from "@/store/services/question";
 
 import CustomToast from "./custom-toast";
 import { Button } from "./ui/button";
@@ -29,13 +32,18 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title }) => {
   const { getToken } = useKindeAuth();
   const [getPracticeQuestions, { isLoading }] =
     useGetPracticeQuestionsMutation();
-  const [option, setOption] = useState<string>("");
+  const [option, setOption] = useState<string>("fixed");
   const [difficulty, setDifficulty] = useState<string>("");
   const [token, setToken] = useState<string | undefined>(undefined);
   const [numberQuestions, setNumberQuestions] = useState<string>("");
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
 
   const { data: courses } = useGetCoursesQuery(`${token}`, {
+    skip: !token,
+    refetchOnMountOrArgChange: true,
+  });
+
+  const { data: questions } = useGetQuestionsQuery(`${token}`, {
     skip: !token,
     refetchOnMountOrArgChange: true,
   });
@@ -67,39 +75,49 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title }) => {
   };
 
   const getQuestions = async () => {
-    try {
-      const response = await getPracticeQuestions({
-        token: token as string,
-        body: {
-          course_id: courses?.filter(
-            (course) => course.course_title === selectedCourses[0]
-          )[0].course_id as number,
-          difficulty_level: difficulty.toLowerCase(),
-          // @ts-ignore
-          limit: Number(numberQuestions),
-        },
-      });
+    localStorage.setItem("option", option);
 
-      if (response.data) {
-        localStorage.setItem("questions", JSON.stringify(response.data));
-        navigate(`/question-attempt/${response.data[0].question_id}`);
-      } else {
+    if (option === "fixed") {
+      try {
+        const response = await getPracticeQuestions({
+          token: token as string,
+          body: {
+            course_id: courses?.filter(
+              (course) => course.course_title === selectedCourses[0]
+            )[0].course_id as number,
+            difficulty_level: difficulty.toLowerCase(),
+            // @ts-ignore
+            limit: Number(numberQuestions),
+          },
+        });
+
+        if (response.data) {
+          localStorage.setItem("questions", JSON.stringify(response.data));
+          navigate(`/question-attempt/${response.data[0].question_id}`);
+        } else {
+          toast.custom(() => (
+            <CustomToast
+              type="error"
+              title="Warning"
+              description="This Course Has No Questions!"
+            />
+          ));
+        }
+      } catch (error: Error | unknown) {
         toast.custom(() => (
           <CustomToast
             type="error"
-            title="Warning"
-            description="This Course Has No Questions!"
+            title="Error"
+            description={(error as Error).message}
           />
         ));
       }
-    } catch (error: Error | unknown) {
-      toast.custom(() => (
-        <CustomToast
-          type="error"
-          title="Error"
-          description={(error as Error).message}
-        />
-      ));
+    } else {
+      const firstPractice = questions?.filter(
+        (q) => q.question_type === "Practice"
+      )[0];
+
+      navigate(`/question-attempt/${firstPractice?.question_id}`);
     }
   };
 
@@ -131,6 +149,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title }) => {
               id="option1"
               name="options"
               value="fixed"
+              checked={option === "fixed"}
               onChange={(e) => setOption(e.target.value)}
             />
             <label htmlFor="option1" className="ml-2 font-bold">
@@ -242,6 +261,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title }) => {
               id="option3"
               name="options"
               value="say"
+              checked={option === "say"}
               onChange={(e) => setOption(e.target.value)}
             />
             <label htmlFor="option3" className="ml-2 font-bold">

@@ -51,10 +51,14 @@ export const mathApi = api.injectEndpoints({
         },
       }),
       providesTags: ["statistics"],
-      transformResponse: (response: {  total_attempts: number }) => response,
+      transformResponse: (response: { total_attempts: number }) => response,
     }),
   }),
 });
 
-export const { usePostUserStatisticsMutation, useGetUserStatisticsQuery, useGetUserStatisticsSkillsQuery, useGetTotalAttemptsQuery } =
-  mathApi;
+export const {
+  usePostUserStatisticsMutation,
+  useGetUserStatisticsQuery,
+  useGetUserStatisticsSkillsQuery,
+  useGetTotalAttemptsQuery,
+} = mathApi;
