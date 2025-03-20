@@ -164,7 +164,7 @@ const Practice = () => {
             <Search className="text-primary" />
             <Input
               type="text"
-              placeholder="Search"
+              placeholder="Search by Question Title"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="border-none bg-transparent shadow-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
@@ -188,7 +188,7 @@ const Practice = () => {
                 <TableRow>
                   <TableHead>Question Title</TableHead>
                   <TableHead>Course</TableHead>
-                  <TableHead>Lesson</TableHead>
+                  <TableHead>Lesson Tittle</TableHead>
                   <TableHead>Standard</TableHead>
                   <TableHead>Difficulty Level</TableHead>
                   {/* <TableHead>

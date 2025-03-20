@@ -171,7 +171,7 @@ const Problems = () => {
             <Search className="text-primary" />
             <Input
               type="text"
-              placeholder="Search"
+              placeholder="Search by Question Title"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="border-none bg-transparent shadow-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
@@ -243,7 +243,7 @@ const Problems = () => {
                 <TableRow>
                   <TableHead>Question Title</TableHead>
                   <TableHead>Course</TableHead>
-                  <TableHead>Lesson</TableHead>
+                  <TableHead>Lesson Tittle </TableHead>
                   <TableHead>Standard</TableHead>
                   <TableHead>Difficulty Level</TableHead>
                   <TableHead>Tags</TableHead>
@@ -290,14 +290,14 @@ const Problems = () => {
                     </TableCell>
                     <TableCell
                       className={cn(
-                        "flex w-full gap-1.5 overflow-hidden truncate p-2"
+                        "flex w-full gap-1.5 overflow-hidden truncate px-2"
                       )}
                     >
                       {question.skill_tags.slice(0, 2).map((tag, tagIndex) => (
                         <span
                           key={tagIndex}
                           className={cn(
-                            "w-fit shrink-0 rounded-md bg-white p-2 text-center font-medium",
+                            "w-fit shrink-0 rounded-md bg-white px-2 text-center font-medium",
                             { "bg-muted": index % 2 === 0 }
                           )}
                         >

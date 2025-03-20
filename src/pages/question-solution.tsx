@@ -378,19 +378,24 @@ const QuestionSolution = () => {
                 backgroundColor: "#ffffff",
               }}
             />
-            <div className="absolute z-[1] flex h-full w-full flex-col items-start justify-start gap-5 rounded-xl p-5">
-              <div id="question-text">
-                <MathJax>{data?.question_title}</MathJax>
-              </div>
-              {!uploadedImage && (
-                <div
-                  className="w-full flex-grow"
-                  style={{ height: `${canvasHeight}px` }}
-                >
-                  {/* @ts-ignore */}
-                  <Canvas ref={canvasRef} />
+            <div className="absolute grid grid-cols-2 z-[1]  h-full w-full flex-col items-start justify-start gap-5 rounded-xl p-5">
+              <div>
+                <div id="question-text">
+                  <MathJax>{data?.question_title}</MathJax>
                 </div>
-              )}
+                {!uploadedImage && (
+                  <div
+                    className="w-full max-w-4xl flex-grow"
+                    style={{ height: `${canvasHeight}px` }}
+                  >
+                    {/* @ts-ignore */}
+
+                    <Canvas ref={canvasRef} />
+
+                  </div>
+                )}
+              </div>
+              <div> <img src={data?.image_url} className="size-72 ml-auto" /></div>
             </div>
           </div>
           <div className="flex w-full items-center justify-end gap-4">

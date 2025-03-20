@@ -28,7 +28,23 @@ export const authApi = api.injectEndpoints({
       }),
       transformResponse: (response: GetUser) => response,
     }),
+    updateUser: builder.mutation({
+      query: ({
+        body,
+        token,
+      }: {
+        body: {name:string;};
+        token: string;
+      }) => ({
+        url: "/users/edit",
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body,
+      }),
+    })
   }),
 });
 
-export const { useLoginMutation, useGetUserQuery } = authApi;
+export const { useLoginMutation, useGetUserQuery , useUpdateUserMutation } = authApi;

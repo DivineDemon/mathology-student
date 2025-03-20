@@ -30,8 +30,31 @@ export const mathApi = api.injectEndpoints({
         }
       },
     }),
+    getUserStatisticsSkills: builder.query({
+      query: (token: string) => ({
+        url: "/user-statistics/skill-level",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+      providesTags: ["statistics"],
+      transformResponse: (response: { skill_level: number }) => response,
+    }),
+
+    getTotalAttempts: builder.query({
+      query: (token: string) => ({
+        url: "/user-statistics/total-attempts",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+      providesTags: ["statistics"],
+      transformResponse: (response: {  total_attempts: number }) => response,
+    }),
   }),
 });
 
-export const { usePostUserStatisticsMutation, useGetUserStatisticsQuery } =
+export const { usePostUserStatisticsMutation, useGetUserStatisticsQuery, useGetUserStatisticsSkillsQuery, useGetTotalAttemptsQuery } =
   mathApi;

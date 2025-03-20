@@ -7,6 +7,8 @@ import {
   FileChartColumn,
   FileText,
   Loader2,
+  Pen,
+  PencilLine,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -21,15 +23,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { useGetUserQuery } from "@/store/services/auth";
+import { useGetUserQuery, useUpdateUserMutation } from "@/store/services/auth";
 import { useGetQuestionsQuery } from "@/store/services/question";
-import { useGetUserStatisticsQuery } from "@/store/services/statistics";
+import { useGetTotalAttemptsQuery, useGetUserStatisticsQuery, useGetUserStatisticsSkillsQuery } from "@/store/services/statistics";
+import { toast } from "sonner";
+import CustomToast from "@/components/custom-toast";
 
 const Profile = () => {
   const { getToken } = useKindeAuth();
   const [period, setPeriod] = useState("weekly");
   const [token, setToken] = useState<string | null>(null);
-
+  const [name, setName] = useState("")
   const handleToken = async () => {
     let test: string | undefined = "";
 
@@ -40,7 +44,51 @@ const Profile = () => {
     setToken(test ?? "");
   };
 
-  const { data, isLoading } = useGetQuestionsQuery(`${token}`, {
+  const [updateUser, { isLoading }
+  ] = useUpdateUserMutation();
+
+  const handleUpdate = async () => {
+    const response = await updateUser({
+      token: token as string,
+      body: {
+        name,
+      }
+    })
+
+    if(response){
+      toast.custom(()=>(
+        <CustomToast
+          title="Success"
+          description="Profile updated successfully"
+          type="success"
+        />
+      ))
+
+    }
+    else{
+      toast.custom(()=>(
+        <CustomToast
+          title="error"
+          description="Profile update Failed"
+          type="error"
+        />
+      ))
+    }
+  }
+
+  const { data: attempt } = useGetTotalAttemptsQuery(`${token}`, {
+    skip: !token,
+    refetchOnMountOrArgChange: true
+  })
+
+  const { data: skill, isLoading: skillLoading } = useGetUserStatisticsSkillsQuery(`${token}`, {
+    skip: !token,
+    refetchOnMountOrArgChange: true
+  })
+
+
+
+  const { data } = useGetQuestionsQuery(`${token}`, {
     skip: !token,
     refetchOnMountOrArgChange: true,
   });
@@ -63,7 +111,10 @@ const Profile = () => {
 
   useEffect(() => {
     handleToken();
-  }, [getToken]);
+    if (user) {
+      setName(user.name)
+    }
+  }, [getToken, user]);
 
   return isLoading && isLoadingUser && isLoadingStats ? (
     <div className="h-screen w-full">
@@ -81,49 +132,52 @@ const Profile = () => {
       </nav>
       <div className="flex min-h-[calc(100vh-64px)] w-full flex-col items-start justify-start p-5">
         <div className="flex w-full flex-col items-start justify-center gap-5 lg:flex-row">
-          <div className="flex w-full flex-row items-start justify-start gap-3 rounded-xl bg-white p-5 lg:h-[300px] lg:w-1/2 lg:flex-col xl:h-[582.5px]">
+          <div className="flex w-full flex-row items-start justify-start gap-3 rounded-xl bg-white p-5  lg:w-1/2 lg:flex-col ">
             <div className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
               <img
                 src="https://ui.shadcn.com/avatars/04.png"
                 className="size-16 shrink-0 rounded-xl border-2 border-white lg:size-16"
               />
               <div className="flex flex-1 flex-col items-start justify-start">
-                <span className="w-full overflow-hidden truncate text-left text-xl font-bold lg:w-[140px] xl:w-full">
-                  {user?.email || "johndoe@example.com"}
-                </span>
+                <div className="flex justify-between w-full">
+                  <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="text-sm rounded-md px-2 py-0.5" />
+                  <button disabled={isLoading} onClick={handleUpdate}>  {isLoading ? <Loader2 className=" animate-spin text-primary" /> : <PencilLine />}</button>
+                </div>
                 <span className="lg:text-medium w-full text-left text-gray-400 md:text-sm">
                   {user?.designation || "Creator"}
                 </span>
               </div>
             </div>
-            <div className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
-              <div className="flex size-16 shrink-0 items-center justify-center rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
-                <FileChartColumn className="size-full" />
+            <div className="flex gap-5 w-full">
+              <div className="flex flex-col w-full items-start justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
+                <div className="flex  size-16 shrink-0 items-start   justify-start rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
+                  <FileChartColumn className="size-full" />
+                </div>
+                <div className="flex flex-1 flex-col items-center justify-center">
+                  <span className="w-full text-left text-xl font-bold lg:text-3xl">
+                    {attempt?.total_attempts || 0}
+                  </span>
+                  <span className="lg:text-medium w-full text-left text-sm text-gray-400">
+                    Attempt Questions
+                  </span>
+                </div>
               </div>
-              <div className="flex flex-1 flex-col items-center justify-center">
-                <span className="w-full text-left text-xl font-bold lg:text-3xl">
-                  {user?.total_attempts || "369"}
-                </span>
-                <span className="lg:text-medium w-full text-left text-sm text-gray-400">
-                  Attempt Questions
-                </span>
-              </div>
-            </div>
-            <div className="hidden h-full w-full flex-col items-center justify-center gap-5 rounded-xl bg-gray-100 xl:flex">
-              <div className="flex size-20 items-center justify-center rounded-full bg-primary/20 text-blue-600">
-                <BadgePercent className="size-10" />
-              </div>
-              <div className="flex w-full flex-col items-center justify-center">
-                <span className="w-full text-center text-3xl font-bold">
-                  65%
-                </span>
-                <span className="w-full text-center text-gray-500">
-                  Student Skill Metric
-                </span>
+              <div className="flex flex-col w-full items-start justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
+                <div className="flex  size-20 shrink-0 items-center   justify-center rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
+                  <BadgePercent className="size-10" />
+                </div>
+                <div className="flex w-full flex-col items-start justify-center">
+                  <span className="w-full text-start text-3xl font-bold">
+                    {skillLoading ? <Loader2 className="size-16 animate-spin text-primary" /> : <>{skill?.skill_level} <span>%</span></>}
+                  </span>
+                  <span className="w-full text-start text-gray-500">
+                    Student Skill Metric
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-          <div className="flex h-full w-full flex-col items-start justify-start gap-5 rounded-xl bg-white p-5 lg:w-2/3">
+          <div className="flex h-[356px] w-full flex-col items-start justify-start gap-5 rounded-xl bg-white p-5 lg:w-2/3">
             <div className="flex w-full items-center justify-center">
               <span className="flex-1 text-left text-2xl font-bold">
                 Practice Activity
