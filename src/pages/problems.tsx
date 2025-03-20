@@ -254,12 +254,8 @@ const Problems = () => {
                     <TableHead>Question Title</TableHead>
                     <TableHead>Course</TableHead>
                     <TableHead>Lesson</TableHead>
-                    <TableHead>Standard
-
-                    </TableHead>
-                    <TableHead>Difficulty Level
-
-                    </TableHead>
+                    <TableHead>Standard</TableHead>
+                    <TableHead>Difficulty Level</TableHead>
                     <TableHead>Tags</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -284,11 +280,11 @@ const Problems = () => {
                       <TableCell className="overflow-hidden truncate">
                         {truncateString(question.lesson_title, 10)}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-start">
                         {question.standard_title}
                       </TableCell>
                       <TableCell>
-                        <div className="flex w-full items-center justify-center">
+                        <div className="flex w-full items-center justify-start">
                           <div
                             className={cn(
                               "w-fit text-center font-semibold capitalize",
