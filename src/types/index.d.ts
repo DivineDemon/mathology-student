@@ -121,6 +121,7 @@ declare type GetQuestion = {
   created_at: string;
   updated_at: string;
   total_attempts?: number;
+  image_url: string;
 };
 
 declare type PutQuestion = {

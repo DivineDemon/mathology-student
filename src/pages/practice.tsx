@@ -4,16 +4,16 @@ import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { ChevronLeft, ChevronRight, Loader2, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import Sort from "@/assets/img/sort.svg";
+// import Sort from "@/assets/img/sort.svg";
 import Modal from "@/components/modal-prctice";
 import NotFound from "@/components/not-found";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
@@ -38,10 +38,12 @@ const Practice = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  // @ts-ignore
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(
     null
   );
 
+  // @ts-ignore
   const [selectedStandard, setSelectedStandard] = useState<string | null>(null);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -51,6 +53,7 @@ const Practice = () => {
     refetchOnMountOrArgChange: true,
   });
 
+  // @ts-ignore
   const { data: standards } = useGetStandardsQuery(`${token}`, {
     skip: !token,
     refetchOnMountOrArgChange: true,
@@ -186,7 +189,9 @@ const Practice = () => {
                   <TableHead>Question Title</TableHead>
                   <TableHead>Course</TableHead>
                   <TableHead>Lesson</TableHead>
-                  <TableHead>
+                  <TableHead>Standard</TableHead>
+                  <TableHead>Difficulty Level</TableHead>
+                  {/* <TableHead>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
@@ -252,7 +257,7 @@ const Practice = () => {
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  </TableHead>
+                  </TableHead> */}
                   <TableHead>Tags</TableHead>
                 </TableRow>
               </TableHeader>
@@ -268,20 +273,16 @@ const Practice = () => {
                     }
                     title={question.question_title}
                   >
-                    <TableCell className="overflow-hidden truncate font-medium">
-                      {truncateString(question.question_title, 10)}
+                    <TableCell className="font-medium">
+                      {question.question_title}
                     </TableCell>
-                    <TableCell className="overflow-hidden truncate">
-                      {truncateString(question.course_title, 10)}
-                    </TableCell>
-                    <TableCell className="overflow-hidden truncate">
-                      {truncateString(question.lesson_title, 10)}
-                    </TableCell>
-                    <TableCell className="text-center">
+                    <TableCell className="">{question.course_title}</TableCell>
+                    <TableCell className="">{question.lesson_title}</TableCell>
+                    <TableCell className="text-start">
                       {question.standard_title}
                     </TableCell>
                     <TableCell>
-                      <div className="flex w-full items-center justify-center">
+                      <div className="flex w-full items-center justify-start">
                         <div
                           className={cn(
                             "w-fit text-center font-semibold capitalize",

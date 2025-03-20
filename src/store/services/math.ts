@@ -9,7 +9,7 @@ export const mathApi = api.injectEndpoints({
         body,
       }),
     }),
-    postMathSolution: build.mutation({
+    postMathSol: build.mutation({
       query: ({
         question_id,
         query,
@@ -20,6 +20,27 @@ export const mathApi = api.injectEndpoints({
         token: string;
       }) => ({
         url: "/math/solution",
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: {
+          question_id,
+          query,
+        },
+      }),
+    }),
+    postMathSolution: build.mutation({
+      query: ({
+        question_id,
+        query,
+        token,
+      }: {
+        question_id: number;
+        query: string;
+        token: string;
+      }) => ({
+        url: "/math/query",
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -44,18 +65,21 @@ export const mathApi = api.injectEndpoints({
     chatbot: build.mutation({
       query: ({
         question_title,
+        query,
         token,
       }: {
         question_title: string;
+        query: string;
         token: string;
       }) => ({
-        url: "/math/support/bot",
+        url: "/math/query",
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
         },
         body: {
           question_title,
+          query,
         },
       }),
     }),
@@ -66,4 +90,5 @@ export const {
   usePostMathSolutionMutation,
   usePostMathSolveMathMutation,
   useChatbotMutation,
+  usePostMathSolMutation,
 } = mathApi;

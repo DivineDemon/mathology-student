@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/sheet";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 // import WarningModal from "@/components/warning-modal";
-import { cn, parseImage } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { usePostMathSolveMathMutation } from "@/store/services/math";
 import {
   useGetQuestionQuery,
@@ -87,8 +87,14 @@ const QuestionSolution = () => {
       return;
     }
 
-    const image = await parseImage(e.target.files?.[0]);
-    setUploadedImage(image as string);
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setUploadedImage(reader.result as string);
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const handleExport = async () => {
@@ -123,36 +129,58 @@ const QuestionSolution = () => {
         },
       });
     } else {
-      const dataURL = await stageInstance.toBlob();
-      image = (await parseImage(dataURL as File)) as string;
+      image = await stageInstance.toDataURL();
+      // image = (await parseImage(dataURL as File)) as string;
 
       response = await solution({
         token: `${token}`,
         body: {
-          image_url: image as string,
+          image_url: image,
           question_id: data?.question_id as number,
         },
       });
     }
 
     if (!response?.error) {
-      localStorage.setItem(
-        "solution",
-        JSON.stringify({
-          status: response?.data as string,
-          solution: uploadedImage
-            ? (uploadedImage as string)
-            : (image as string),
-        })
-      );
+      if ((response?.data as string) === "Correct") {
+        // @ts-ignore
+        const qList = JSON.parse(localStorage.getItem("questions") || []);
 
-      const increment = await increaseAttempt({
-        id: data?.question_id as number,
-        token: `${token}`,
-      });
+        if (Array.isArray(qList) && qList.length < 2) {
+          navigate("/practices");
+        } else {
+          const findIndex = qList!.findIndex(
+            (question: {
+              question_id: number;
+              question_title: string;
+              question_description: string;
+              skill_tags: string[];
+            }) => question.question_id === Number(id)
+          );
 
-      if (!increment.error) {
-        navigate(`/question-artboard/${data?.question_id}`);
+          navigate(
+            `/question-solution/${qList?.[Number(findIndex) + 1]?.question_id}`
+          );
+        }
+      } else {
+        localStorage.setItem(
+          "solution",
+          JSON.stringify({
+            status: response?.data as string,
+            solution: uploadedImage
+              ? (uploadedImage as string)
+              : (image as string),
+          })
+        );
+
+        const increment = await increaseAttempt({
+          id: data?.question_id as number,
+          token: `${token}`,
+        });
+
+        if (!increment.error) {
+          navigate(`/question-artboard/${data?.question_id}`);
+        }
       }
     } else {
       toast.custom(() => (

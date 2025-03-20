@@ -170,8 +170,9 @@ const AttemptQuestion = () => {
                 backgroundColor: "#ffffff",
               }}
             />
-            <div className="absolute z-[1] flex h-full w-full flex-col items-start justify-start gap-5 rounded-xl p-5">
+            <div className="absolute z-[1] grid h-full w-full grid-cols-2 items-start justify-start gap-5 rounded-xl p-5">
               <MathJax>{data?.question_title}</MathJax>
+              <img src={data?.image_url} className="ml-auto" />
             </div>
           </div>
           <div className="flex w-full items-center justify-end">

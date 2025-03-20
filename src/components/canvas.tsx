@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 
+import Konva from "konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import { Layer, Line, Stage } from "react-konva";
 
@@ -31,7 +32,8 @@ interface CanvasProps {
 }
 
 const Canvas = forwardRef(({ width, height }: CanvasProps, ref) => {
-  const stageRef = useRef<any>(null);
+  const layerRef = useRef<Konva.Layer>(null);
+  const stageRef = useRef<Konva.Stage>(null);
   const [tool, setTool] = useState<Tool>("pen");
   const [isDrawing, setIsDrawing] = useState(false);
   const [strokeWidth, setStrokeWidth] = useState(5);
@@ -40,37 +42,6 @@ const Canvas = forwardRef(({ width, height }: CanvasProps, ref) => {
 
   const containerHeight = height || 500;
   const containerWidth = width || window.innerWidth - 50;
-
-  useImperativeHandle(ref, () => ({
-    getStage: () => stageRef.current,
-    clearCanvas: () => {
-      setLines([]);
-      setHistory([]);
-    },
-    getLines: () => lines,
-  }));
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "z") {
-        handleUndo();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [lines]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (!width || !height) {
-        setLines([...lines]);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [width, height, lines]);
 
   const handleMouseDown = (
     e: KonvaEventObject<TouchEvent> | KonvaEventObject<MouseEvent>
@@ -137,6 +108,48 @@ const Canvas = forwardRef(({ width, height }: CanvasProps, ref) => {
     setStrokeWidth(parseInt(e.target.value, 10));
   };
 
+  const clearCanvas = () => {
+    if (layerRef.current) {
+      console.log("hit");
+      layerRef.current.clear();
+    }
+  };
+
+  useImperativeHandle(ref, () => ({
+    getStage: () => stageRef.current,
+    clearCanvas: () => {
+      setLines([]);
+      setHistory([]);
+    },
+    getLines: () => lines,
+  }));
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "z") {
+        handleUndo();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lines]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (!width || !height) {
+        setLines([...lines]);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [width, height, lines]);
+
+  useEffect(() => {
+    clearCanvas();
+  }, []);
+
   return (
     <div className="flex h-full w-full flex-col items-start justify-start gap-5">
       <div className="flex w-full items-center justify-start gap-4">
@@ -185,7 +198,7 @@ const Canvas = forwardRef(({ width, height }: CanvasProps, ref) => {
           onTouchEnd={handleMouseUp}
           ref={stageRef}
         >
-          <Layer>
+          <Layer ref={layerRef}>
             {lines.map((line) => (
               <Line
                 key={line.id}

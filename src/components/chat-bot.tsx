@@ -61,7 +61,7 @@ const ChatBot = () => {
               ? {
                   id: Date.now(),
                   sender: "bot",
-                  text: response.data.solution_explain,
+                  text: response.data.response,
                 }
               : msg
           )

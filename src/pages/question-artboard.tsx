@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { usePostMathSolutionMutation } from "@/store/services/math";
+import { usePostMathSolMutation } from "@/store/services/math";
 import { useGetQuestionQuery } from "@/store/services/question";
 
 const QuestionArtboard = () => {
@@ -32,7 +32,7 @@ const QuestionArtboard = () => {
   const [reveal, setReveal] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
-  const [getAISolution, { isLoading }] = usePostMathSolutionMutation();
+  const [getAISolution, { isLoading }] = usePostMathSolMutation();
   const [submittedSolution, setSubmittedSolution] = useState<string>("");
 
   const handleToken = async () => {
