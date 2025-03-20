@@ -4,7 +4,6 @@ import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { ChevronDown, ChevronLeft, ChevronRight, Loader2, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import Sort from "@/assets/img/sort.svg";
 import NotFound from "@/components/not-found";
 import { Button } from "@/components/ui/button";
 import {
