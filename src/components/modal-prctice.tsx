@@ -87,8 +87,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title }) => {
         toast.custom(() => (
           <CustomToast
             type="error"
-            title="Error"
-            description="Something went wrong!"
+            title="Warning"
+            description="This Course Has No Questions!"
           />
         ));
       }
