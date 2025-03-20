@@ -103,15 +103,15 @@ const QuestionArtboard = () => {
   useEffect(() => {
     handleToken();
 
-    // const userSolution: {
-    //   status: string;
-    //   solution: string;
-    // } = JSON.parse(localStorage.getItem("solution")!);
+    const userSolution: {
+      status: string;
+      solution: string;
+    } = JSON.parse(localStorage.getItem("solution")!);
 
-    const userSolution = {
-      status: "Correct",
-      solution: "Solution",
-    };
+    // const userSolution = {
+    //   status: "Correct",
+    //   solution: "Solution",
+    // };
 
     if (userSolution.status === "Correct") {
       setIsCorrect(true);
