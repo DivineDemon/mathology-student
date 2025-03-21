@@ -144,6 +144,14 @@ const QuestionSolution = () => {
 
     if (!response?.error) {
       if ((response?.data as string) === "Correct") {
+        toast.custom(() => (
+          <CustomToast
+            type="success"
+            title="Success"
+            description="Correct Answer!"
+          />
+        ));
+
         const option = localStorage.getItem("option");
 
         if (option === "say") {

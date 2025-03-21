@@ -207,11 +207,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title }) => {
                     <SelectValue placeholder="No. of Questions" />
                   </SelectTrigger>
                   <SelectContent>
-                    {["1","2","3","4","5","6","7","8","9","10"].map((amt) => (
-                      <SelectItem key={amt} value={amt}>
-                        {amt}
-                      </SelectItem>
-                    ))}
+                    {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"].map(
+                      (amt) => (
+                        <SelectItem key={amt} value={amt}>
+                          {amt}
+                        </SelectItem>
+                      )
+                    )}
                   </SelectContent>
                 </Select>
               </div>
