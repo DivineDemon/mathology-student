@@ -221,14 +221,14 @@ const Profile = () => {
                 </div>
               </div>
               <div className="flex w-full flex-col items-start justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
-                <div className="flex size-20 shrink-0 items-center justify-center rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
+                <div className="flex size-16 shrink-0 items-start justify-start rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
                   <img src={Skillimg} alt="" />
                 </div>
-                <div className="flex w-full flex-col items-start justify-center">
-                  <span className="w-full text-start text-3xl font-bold">
-                    {skill?.skill_level} <span>%</span>
+                <div className="flex flex-1 flex-col items-center justify-center">
+                  <span className="w-full text-left text-xl font-bold lg:text-3xl">
+                    {skill?.skill_level}&nbsp;%
                   </span>
-                  <span className="w-full text-start text-gray-500">
+                  <span className="lg:text-medium w-full text-left text-sm text-gray-400">
                     Student Skill Metric
                   </span>
                 </div>

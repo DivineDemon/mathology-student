@@ -99,7 +99,7 @@ const AppSidebar = () => {
                     : "https://ui.shadcn.com/avatars/04.png"
               }
               alt="User"
-              className="size-10 shrink-0 cursor-pointer rounded-md border"
+              className="aspect-square size-10 shrink-0 cursor-pointer rounded-md border object-cover"
               onClick={() => navigate("/profile")}
             />
             <div
