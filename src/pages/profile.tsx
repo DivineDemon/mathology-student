@@ -32,6 +32,11 @@ import {
   useGetUserStatisticsSkillsQuery,
 } from "@/store/services/statistics";
 
+import Skillimg from "@/assets/img/skillimg.svg";
+import Note from "@/assets/img/note.svg";
+import Save from "@/assets/img/save.svg";
+import Edit from "@/assets/img/edit.svg";
+
 const Profile = () => {
   const { getToken } = useKindeAuth();
   const [period, setPeriod] = useState("weekly");
@@ -138,19 +143,19 @@ const Profile = () => {
                 className="size-16 shrink-0 rounded-xl border-2 border-white lg:size-16"
               />
               <div className="flex flex-1 flex-col items-start justify-start">
-                <div className="flex w-full justify-between">
+                <div className="flex relative w-full justify-between">
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="rounded-md px-2 py-0.5 text-sm"
                   />
-                  <button disabled={isLoading} onClick={handleUpdate}>
+                  <button className="absolute size-5 -right-2 -top-4" disabled={isLoading} onClick={handleUpdate}>
                     {" "}
                     {isLoading ? (
-                      <Loader2 className="animate-spin text-primary" />
+                      <Loader2 className="animate-spin size-full text-primary" />
                     ) : (
-                      <PencilLine />
+                      <PencilLine  className="size-full"/>
                     )}
                   </button>
                 </div>
@@ -162,7 +167,7 @@ const Profile = () => {
             <div className="flex w-full gap-5">
               <div className="flex w-full flex-col items-start justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
                 <div className="flex size-16 shrink-0 items-start justify-start rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
-                  <FileChartColumn className="size-full" />
+                  <img src={Note} alt="" />
                 </div>
                 <div className="flex flex-1 flex-col items-center justify-center">
                   <span className="w-full text-left text-xl font-bold lg:text-3xl">
@@ -175,7 +180,7 @@ const Profile = () => {
               </div>
               <div className="flex w-full flex-col items-start justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
                 <div className="flex size-20 shrink-0 items-center justify-center rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
-                  <BadgePercent className="size-10" />
+                  <img src={Skillimg} alt="" />
                 </div>
                 <div className="flex w-full flex-col items-start justify-center">
                   <span className="w-full text-start text-3xl font-bold">
@@ -245,17 +250,17 @@ const Profile = () => {
                   key={item.question_id}
                 >
                   <p className="w-full text-left font-semibold">
-                    {item.question_id}: Exam {item.question_type}:&nbsp;
+                   
                     {item.question_title}
                   </p>
                   <div className="flex w-full items-center justify-start text-xs text-gray-500">
-                    <FileText className="mr-4 size-5 text-gray-400" />
+                    <FileText className="mr-4 size-5 text-white fill-gray-400"  />
                     <span className="line-clamp-1 flex-1 text-left">
                       {item.question_description}
                     </span>
                   </div>
                   <div className="flex w-full items-center justify-start gap-4">
-                    <Button variant="outline"> {item.standard_title}</Button>
+                    {/* <Button variant="outline"> {item.standard_title}</Button> */}
                     <Link
                       to={`/question-attempt/${item.question_id}`}
                       className={cn(
