@@ -33,7 +33,7 @@ export const authApi = api.injectEndpoints({
         body,
         token,
       }: {
-        body: { name: string; image_url: string };
+        body: { name: string; profile_picture_url: string };
         token: string;
       }) => ({
         url: "/users/edit",

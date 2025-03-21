@@ -107,10 +107,10 @@ const AppSidebar = () => {
               className="flex w-32 flex-col items-center justify-center"
             >
               <span className="w-full overflow-hidden truncate text-left font-semibold">
-                {data?.email || "M.Ahmad@gmail.com"}
+                {data?.email || ""}
               </span>
               <span className="w-full overflow-hidden truncate text-left text-xs font-light">
-                {data?.designation || "Full Stack Developer"}
+                {data?.designation || ""}
               </span>
             </div>
             <Button

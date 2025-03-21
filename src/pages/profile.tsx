@@ -41,23 +41,18 @@ const Profile = () => {
   const [image, setImage] = useState("https://ui.shadcn.com/avatars/04.png");
 
   const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-    let temp: string = "";
     const file = e.target.files?.[0];
-
     if (file) {
-      temp = (await parseImage(file)) as string;
+      const temp = (await parseImage(file)) as string;
       setImage(temp);
     }
   };
 
   const handleToken = async () => {
-    let test: string | undefined = "";
-
     if (getToken) {
-      test = await getToken();
+      const tokenValue = await getToken();
+      setToken(tokenValue ?? "");
     }
-
-    setToken(test ?? "");
   };
 
   const handleUpdate = async () => {
@@ -65,7 +60,7 @@ const Profile = () => {
       token: token as string,
       body: {
         name,
-        image_url: image,
+        profile_picture_url: image,
       },
     });
 
@@ -120,20 +115,27 @@ const Profile = () => {
     }
   );
 
+  const unifiedLoading = isLoadingUser || isLoadingStats || skillLoading;
+
   useEffect(() => {
     handleToken();
     if (user) {
       setName(user.name);
+      setImage(user.profile_picture_url);
     }
   }, [getToken, user]);
 
-  return isLoading && isLoadingUser && isLoadingStats ? (
-    <div className="h-screen w-full">
-      <div className="flex h-full w-full items-center justify-center">
-        <Loader2 className="size-16 animate-spin text-primary" />
+  if (unifiedLoading) {
+    return (
+      <div className="h-screen w-full">
+        <div className="flex h-full w-full items-center justify-center">
+          <Loader2 className="size-16 animate-spin text-primary" />
+        </div>
       </div>
-    </div>
-  ) : (
+    );
+  }
+
+  return (
     <div className="flex h-full min-h-screen w-full flex-col items-start justify-start">
       <nav className="flex h-16 w-full shrink-0 items-center justify-between border-b px-5 py-2.5">
         <div className="flex items-center justify-center gap-4">
@@ -224,13 +226,7 @@ const Profile = () => {
                 </div>
                 <div className="flex w-full flex-col items-start justify-center">
                   <span className="w-full text-start text-3xl font-bold">
-                    {skillLoading ? (
-                      <Loader2 className="size-16 animate-spin text-primary" />
-                    ) : (
-                      <>
-                        {skill?.skill_level} <span>%</span>
-                      </>
-                    )}
+                    {skill?.skill_level} <span>%</span>
                   </span>
                   <span className="w-full text-start text-gray-500">
                     Student Skill Metric
@@ -268,13 +264,7 @@ const Profile = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            {isLoadingStats ? (
-              <div className="flex h-full w-full items-center justify-center">
-                <Loader2 className="size-10 animate-spin text-primary" />
-              </div>
-            ) : (
-              <Chart data={stats || []} />
-            )}
+            <Chart data={stats || []} />
           </div>
         </div>
 
@@ -299,7 +289,6 @@ const Profile = () => {
                     </span>
                   </div>
                   <div className="flex w-full items-center justify-start gap-4">
-                    {/* <Button variant="outline"> {item.standard_title}</Button> */}
                     <Link
                       to={`/question-attempt/${item.question_id}`}
                       className={cn(
