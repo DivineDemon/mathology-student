@@ -65,6 +65,7 @@ export const api = createApi({
     "math",
     "statistic",
     "statistics",
+    "user",
   ],
   endpoints: () => ({}),
 });

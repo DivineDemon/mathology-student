@@ -414,11 +414,8 @@ const QuestionSolution = () => {
                   </div>
                 )}
               </div>
-              {data?.image_url.includes("https") && (
-                <div>
-                  <img src={data?.image_url} className="ml-auto size-72" />
-                  <span>{data?.image_url}</span>
-                </div>
+              {data?.image_url && data?.image_url.includes("https") && (
+                <img src={data?.image_url} className="ml-auto size-72" />
               )}
             </div>
           </div>

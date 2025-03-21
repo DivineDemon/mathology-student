@@ -26,6 +26,7 @@ export const authApi = api.injectEndpoints({
           Authorization: `Bearer ${token}`,
         },
       }),
+      providesTags: ["user"],
       transformResponse: (response: GetUser) => response,
     }),
     updateUser: builder.mutation({
@@ -43,6 +44,7 @@ export const authApi = api.injectEndpoints({
         },
         body,
       }),
+      invalidatesTags: ["user"],
     }),
   }),
 });

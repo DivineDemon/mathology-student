@@ -110,7 +110,6 @@ const Canvas = forwardRef(({ width, height }: CanvasProps, ref) => {
 
   const clearCanvas = () => {
     if (layerRef.current) {
-      console.log("hit");
       layerRef.current.clear();
     }
   };
