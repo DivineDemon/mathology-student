@@ -60,6 +60,7 @@ const QuestionSolution = () => {
   const [solution, { isLoading: isSolving }] = usePostMathSolveMathMutation();
     const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isImgUploaded, setIsImgUploaded] = useState(false);
+  const [isCanvas, setIsCanvas] = useState(false);
   const handleToken = async () => {
     let test: string | undefined = "";
 
@@ -376,9 +377,8 @@ const QuestionSolution = () => {
                   type="button"
                   variant="default"
                   onClick={() => {
-                    if (fileRef?.current) {
-                      fileRef.current.click();
-                    }
+                    setIsCanvas(true);
+          
                   }}
                   className=""
                 >
@@ -498,6 +498,30 @@ const QuestionSolution = () => {
             <p className="text-xs text-gray-400">Your image has been successfully submitted!</p>
             <button
               onClick={() => setIsImgUploaded(false)}
+              className="mt-4 px-6 bg-primary text-white py-2 rounded-lg hover:bg-primary/70 transition"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
+        {isCanvas && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className=" relative flex flex-col justify-center items-center bg-white p-10 rounded-2xl shadow-lg max-w-lg w-full">
+            <div className="absolute p-1 rounded-full top-3 right-3 cursor-pointer bg-black"   onClick={() => setIsCanvas(false)}>
+            <X className=" text-white"/>
+            </div>
+           <img src={Danger} alt="" className="size-20" />
+            <p className="mt-3 text-xl ">
+           Are You Sure       </p>
+            <p className="text-xs text-gray-400">You will lose your canvas drawing</p>
+            <button
+              onClick={() =>{
+                if (fileRef?.current) {
+                  fileRef.current.click();
+                }
+                setIsCanvas(false);
+              }}
               className="mt-4 px-6 bg-primary text-white py-2 rounded-lg hover:bg-primary/70 transition"
             >
               Continue
