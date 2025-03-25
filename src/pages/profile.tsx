@@ -145,8 +145,8 @@ const Profile = () => {
       </nav>
       <div className="flex min-h-[calc(100vh-64px)] w-full flex-col items-start justify-start p-5">
         <div className="flex w-full flex-col items-start justify-center gap-5 lg:flex-row">
-          <div className="flex w-full flex-row items-start justify-start gap-3 rounded-xl bg-white p-5 lg:w-1/2 lg:flex-col">
-            <div className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
+          <div className="flex w-full flex-row items-start justify-start gap-3 rounded-xl bg-white p-5 lg:w-1/3 lg:flex-col">
+            <div className="flex  items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-3 border w-full max-w-full">
               <div className="relative size-16 shrink-0 rounded-xl border-2 border-white lg:size-28">
                 <input
                   ref={imageRef}
@@ -173,17 +173,17 @@ const Profile = () => {
                   </div>
                 )}
               </div>
-              <div className="flex flex-1 flex-col items-start justify-start">
-                <div className="relative flex w-full justify-between">
+              <div className="flex  flex-col items-start justify-start">
+                <div className="relative flex  justify-between">
                   <input
                     type="text"
                     value={name}
                     disabled={!edit}
                     onChange={(e) => setName(e.target.value)}
-                    className="mb-1 bg-transparent text-3xl font-bold"
+                    className="mb-1 bg-transparent text-3xl font-bold w-full"
                   />
                   <button
-                    className="absolute -right-3 -top-4 size-5"
+                    className="absolute -right-1 -top-8 size-5"
                     disabled={isLoading}
                     onClick={() => {
                       if (edit) {
@@ -207,7 +207,7 @@ const Profile = () => {
               </div>
             </div>
             <div className="flex w-full gap-5">
-              <div className="flex w-full flex-col items-start justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
+              <div className="flex w-full flex-col items-start justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-2">
                 <div className="flex size-16 shrink-0 items-start justify-start rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
                   <img src={Note} alt="" />
                 </div>
@@ -220,7 +220,7 @@ const Profile = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex w-full flex-col items-start justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
+              <div className="flex w-full flex-col items-start justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-2">
                 <div className="flex size-16 shrink-0 items-start justify-start rounded-xl border-2 border-white bg-primary p-3 text-white lg:size-20">
                   <img src={Skillimg} alt="" />
                 </div>
@@ -235,7 +235,7 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          <div className="flex h-[400px] w-full flex-col items-start justify-start gap-5 rounded-xl bg-white p-5 lg:w-2/3">
+          <div className="flex h-[390px] w-full flex-col items-start justify-start gap-5 rounded-xl bg-white p-5 lg:w-2/3">
             <div className="flex w-full items-center justify-center">
               <span className="flex-1 text-left text-2xl font-bold">
                 Practice Activity
