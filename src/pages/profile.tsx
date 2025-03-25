@@ -147,7 +147,7 @@ const Profile = () => {
         <div className="flex w-full flex-col items-start justify-center gap-5 lg:flex-row">
           <div className="flex w-full flex-row items-start justify-start gap-3 rounded-xl bg-white p-5 lg:w-1/2 lg:flex-col">
             <div className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-gray-100 p-5 lg:gap-5">
-              <div className="relative size-16 shrink-0 rounded-xl border-2 border-white lg:size-16">
+              <div className="relative size-16 shrink-0 rounded-xl border-2 border-white lg:size-28">
                 <input
                   ref={imageRef}
                   type="file"
@@ -235,7 +235,7 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          <div className="flex h-[356px] w-full flex-col items-start justify-start gap-5 rounded-xl bg-white p-5 lg:w-2/3">
+          <div className="flex h-[400px] w-full flex-col items-start justify-start gap-5 rounded-xl bg-white p-5 lg:w-2/3">
             <div className="flex w-full items-center justify-center">
               <span className="flex-1 text-left text-2xl font-bold">
                 Practice Activity

@@ -2,9 +2,11 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { MathJax } from "better-react-mathjax";
-import { Loader2, Upload, X } from "lucide-react";
+import { Loader2, Upload, X} from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import Danger from "@/assets/img/danger.svg";
+import Upload1 from "@/assets/img/upload.svg"
 
 import Bot from "@/assets/img/bot.svg";
 import Calculator from "@/assets/img/calculator.svg";
@@ -56,7 +58,8 @@ const QuestionSolution = () => {
   const [questionHeight, setQuestionHeight] = useState<number>(0);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [solution, { isLoading: isSolving }] = usePostMathSolveMathMutation();
-
+    const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [isImgUploaded, setIsImgUploaded] = useState(false);
   const handleToken = async () => {
     let test: string | undefined = "";
 
@@ -93,6 +96,7 @@ const QuestionSolution = () => {
 
     reader.onloadend = () => {
       setUploadedImage(reader.result as string);
+      setIsImgUploaded(true);
     };
 
     reader.readAsDataURL(file);
@@ -111,13 +115,14 @@ const QuestionSolution = () => {
         .some((node: any) => node.getClassName() !== "Transformer");
 
     if (!uploadedImage && !hasCanvasDrawings) {
-      toast.custom(() => (
-        <CustomToast
-          type="error"
-          title="Error"
-          description="Please Upload or Draw/Write a Solution for Submission!"
-        />
-      ));
+      // toast.custom(() => (
+      //   <CustomToast
+      //     type="error"
+      //     title="Error"
+      //     description="Please Upload or Draw/Write a Solution for Submission!"
+      //   />
+      // ));
+      setIsErrorOpen(true);
       return;
     }
 
@@ -151,7 +156,9 @@ const QuestionSolution = () => {
             description="Correct Answer!"
           />
         ));
-
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000); // Delay refresh for 2 seconds to show toast
         const option = localStorage.getItem("option");
 
         if (option === "say") {
@@ -460,6 +467,44 @@ const QuestionSolution = () => {
           </div>
         </div>
       </div>
+      {isErrorOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className=" relative flex flex-col justify-center items-center bg-white p-10 rounded-2xl shadow-lg max-w-lg w-full">
+            <div className="absolute p-1 rounded-full top-3 right-3 cursor-pointer bg-black"   onClick={() => setIsErrorOpen(false)}>
+            <X className=" text-white"/>
+            </div>
+           <img src={Danger} alt="" className="size-20" />
+            <p className="mt-3 0">
+            Please Provide An Answer Before          </p>
+            <p>Submitting.</p>
+            <button
+              onClick={() => setIsErrorOpen(false)}
+              className="mt-4 px-6 bg-primary text-white py-2 rounded-lg hover:bg-primary/70 transition"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
+       {isImgUploaded && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className=" relative flex flex-col justify-center items-center bg-white p-10 rounded-2xl shadow-lg max-w-lg w-full">
+            <div className="absolute p-1 rounded-full top-3 right-3 cursor-pointer bg-black"   onClick={() => setIsErrorOpen(false)}>
+            <X className=" text-white"/>
+            </div>
+           <img src={Upload1} alt="" className="size-20" />
+            <p className="mt-3 text-xl ">
+            Image submitted!         </p>
+            <p className="text-xs text-gray-400">Your image has been successfully submitted!</p>
+            <button
+              onClick={() => setIsImgUploaded(false)}
+              className="mt-4 px-6 bg-primary text-white py-2 rounded-lg hover:bg-primary/70 transition"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };

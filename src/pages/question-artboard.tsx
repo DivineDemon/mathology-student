@@ -5,7 +5,7 @@ import { MathJax } from "better-react-mathjax";
 import { Check, Loader2, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-
+ import Danger from "@/assets/img/danger.svg";
 import CustomToast from "@/components/custom-toast";
 import {
   Breadcrumb,
@@ -34,6 +34,8 @@ const QuestionArtboard = () => {
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [getAISolution, { isLoading }] = usePostMathSolMutation();
   const [submittedSolution, setSubmittedSolution] = useState<string>("");
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
+
 
   const handleToken = async () => {
     let test: string | undefined = "";
@@ -117,6 +119,7 @@ const QuestionArtboard = () => {
       setIsCorrect(true);
     } else {
       setIsCorrect(false);
+      setIsErrorOpen(true);
     }
 
     setSubmittedSolution(userSolution.solution);
@@ -238,7 +241,27 @@ const QuestionArtboard = () => {
           </Button> */}
         </div>
       </div>
+      {isErrorOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className=" relative flex flex-col justify-center items-center bg-white p-10 rounded-2xl shadow-lg max-w-lg w-full">
+            <div className="absolute p-1 rounded-full top-3 right-3 cursor-pointer bg-black"   onClick={() => setIsErrorOpen(false)}>
+            <X className=" text-white"/>
+            </div>
+           <img src={Danger} alt="" className="size-20" />
+            <p className="mt-3 0">
+            Oops. the Solution is not correct .            </p>
+            <p>Try it again</p>
+            <button
+              onClick={() => setIsErrorOpen(false)}
+              className="mt-4 px-6 bg-primary text-white py-2 rounded-lg hover:bg-primary/70 transition"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
     </div>
+    
   );
 };
 
