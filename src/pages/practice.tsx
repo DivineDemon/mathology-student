@@ -303,7 +303,7 @@ const Practice = () => {
                     </TableCell>
                     <TableCell
                       className={cn(
-                        "flex w-full gap-1.5 overflow-hidden px-2 truncate "
+                        "flex w-full gap-1.5 overflow-hidden truncate px-2"
                       )}
                     >
                       {question.skill_tags.slice(0, 2).map((tag, tagIndex) => (

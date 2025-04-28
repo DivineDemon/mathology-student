@@ -2,14 +2,14 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { MathJax } from "better-react-mathjax";
-import { Loader2, Upload, X} from "lucide-react";
+import { Loader2, Upload, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import Danger from "@/assets/img/danger.svg";
-import Upload1 from "@/assets/img/upload.svg"
 
 import Bot from "@/assets/img/bot.svg";
 import Calculator from "@/assets/img/calculator.svg";
+import Danger from "@/assets/img/danger.svg";
+import Upload1 from "@/assets/img/upload.svg";
 import Canvas from "@/components/canvas";
 import ChatBot from "@/components/chat-bot";
 import CustomToast from "@/components/custom-toast";
@@ -58,7 +58,7 @@ const QuestionSolution = () => {
   const [questionHeight, setQuestionHeight] = useState<number>(0);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [solution, { isLoading: isSolving }] = usePostMathSolveMathMutation();
-    const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isImgUploaded, setIsImgUploaded] = useState(false);
   const [isCanvas, setIsCanvas] = useState(false);
   const handleToken = async () => {
@@ -378,7 +378,6 @@ const QuestionSolution = () => {
                   variant="default"
                   onClick={() => {
                     setIsCanvas(true);
-          
                   }}
                   className=""
                 >
@@ -468,61 +467,71 @@ const QuestionSolution = () => {
         </div>
       </div>
       {isErrorOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className=" relative flex flex-col justify-center items-center bg-white p-10 rounded-2xl shadow-lg max-w-lg w-full">
-            <div className="absolute p-1 rounded-full top-3 right-3 cursor-pointer bg-black"   onClick={() => setIsErrorOpen(false)}>
-            <X className=" text-white"/>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative flex w-full max-w-lg flex-col items-center justify-center rounded-2xl bg-white p-10 shadow-lg">
+            <div
+              className="absolute right-3 top-3 cursor-pointer rounded-full bg-black p-1"
+              onClick={() => setIsErrorOpen(false)}
+            >
+              <X className="text-white" />
             </div>
-           <img src={Danger} alt="" className="size-20" />
-            <p className="mt-3 0">
-            Please Provide An Answer Before          </p>
+            <img src={Danger} alt="" className="size-20" />
+            <p className="0 mt-3">Please Provide An Answer Before </p>
             <p>Submitting.</p>
             <button
               onClick={() => setIsErrorOpen(false)}
-              className="mt-4 px-6 bg-primary text-white py-2 rounded-lg hover:bg-primary/70 transition"
+              className="mt-4 rounded-lg bg-primary px-6 py-2 text-white transition hover:bg-primary/70"
             >
               Continue
             </button>
           </div>
         </div>
       )}
-       {isImgUploaded && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className=" relative flex flex-col justify-center items-center bg-white p-10 rounded-2xl shadow-lg max-w-lg w-full">
-            <div className="absolute p-1 rounded-full top-3 right-3 cursor-pointer bg-black"   onClick={() => setIsErrorOpen(false)}>
-            <X className=" text-white"/>
+      {isImgUploaded && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative flex w-full max-w-lg flex-col items-center justify-center rounded-2xl bg-white p-10 shadow-lg">
+            <div
+              className="absolute right-3 top-3 cursor-pointer rounded-full bg-black p-1"
+              onClick={() => setIsErrorOpen(false)}
+            >
+              <X className="text-white" />
             </div>
-           <img src={Upload1} alt="" className="size-20" />
-            <p className="mt-3 text-xl ">
-            Image submitted!         </p>
-            <p className="text-xs text-gray-400">Your image has been successfully submitted!</p>
+            <img src={Upload1} alt="" className="size-20" />
+            <p className="mt-3 text-xl">Image submitted! </p>
+            <p className="text-xs text-gray-400">
+              Your image has been successfully submitted!
+            </p>
             <button
               onClick={() => setIsImgUploaded(false)}
-              className="mt-4 px-6 bg-primary text-white py-2 rounded-lg hover:bg-primary/70 transition"
+              className="mt-4 rounded-lg bg-primary px-6 py-2 text-white transition hover:bg-primary/70"
             >
               Continue
             </button>
           </div>
         </div>
       )}
-        {isCanvas && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className=" relative flex flex-col justify-center items-center bg-white p-10 rounded-2xl shadow-lg max-w-lg w-full">
-            <div className="absolute p-1 rounded-full top-3 right-3 cursor-pointer bg-black"   onClick={() => setIsCanvas(false)}>
-            <X className=" text-white"/>
+      {isCanvas && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative flex w-full max-w-lg flex-col items-center justify-center rounded-2xl bg-white p-10 shadow-lg">
+            <div
+              className="absolute right-3 top-3 cursor-pointer rounded-full bg-black p-1"
+              onClick={() => setIsCanvas(false)}
+            >
+              <X className="text-white" />
             </div>
-           <img src={Danger} alt="" className="size-20" />
-            <p className="mt-3 text-xl ">
-           Are You Sure       </p>
-            <p className="text-xs text-gray-400">You will lose your canvas drawing</p>
+            <img src={Danger} alt="" className="size-20" />
+            <p className="mt-3 text-xl">Are You Sure </p>
+            <p className="text-xs text-gray-400">
+              You will lose your canvas drawing
+            </p>
             <button
-              onClick={() =>{
+              onClick={() => {
                 if (fileRef?.current) {
                   fileRef.current.click();
                 }
                 setIsCanvas(false);
               }}
-              className="mt-4 px-6 bg-primary text-white py-2 rounded-lg hover:bg-primary/70 transition"
+              className="mt-4 rounded-lg bg-primary px-6 py-2 text-white transition hover:bg-primary/70"
             >
               Continue
             </button>

@@ -5,7 +5,8 @@ import { MathJax } from "better-react-mathjax";
 import { Check, Loader2, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
- import Danger from "@/assets/img/danger.svg";
+
+import Danger from "@/assets/img/danger.svg";
 import CustomToast from "@/components/custom-toast";
 import {
   Breadcrumb,
@@ -35,7 +36,6 @@ const QuestionArtboard = () => {
   const [getAISolution, { isLoading }] = usePostMathSolMutation();
   const [submittedSolution, setSubmittedSolution] = useState<string>("");
   const [isErrorOpen, setIsErrorOpen] = useState(false);
-
 
   const handleToken = async () => {
     let test: string | undefined = "";
@@ -242,18 +242,20 @@ const QuestionArtboard = () => {
         </div>
       </div>
       {isErrorOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className=" relative flex flex-col justify-center items-center bg-white p-10 rounded-2xl shadow-lg max-w-lg w-full">
-            <div className="absolute p-1 rounded-full top-3 right-3 cursor-pointer bg-black"   onClick={() => setIsErrorOpen(false)}>
-            <X className=" text-white"/>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative flex w-full max-w-lg flex-col items-center justify-center rounded-2xl bg-white p-10 shadow-lg">
+            <div
+              className="absolute right-3 top-3 cursor-pointer rounded-full bg-black p-1"
+              onClick={() => setIsErrorOpen(false)}
+            >
+              <X className="text-white" />
             </div>
-           <img src={Danger} alt="" className="size-20" />
-            <p className="mt-3 0">
-            Oops. the Solution is not correct .            </p>
+            <img src={Danger} alt="" className="size-20" />
+            <p className="0 mt-3">Oops. the Solution is not correct . </p>
             <p>Try it again</p>
             <button
               onClick={() => setIsErrorOpen(false)}
-              className="mt-4 px-6 bg-primary text-white py-2 rounded-lg hover:bg-primary/70 transition"
+              className="mt-4 rounded-lg bg-primary px-6 py-2 text-white transition hover:bg-primary/70"
             >
               Continue
             </button>
@@ -261,7 +263,6 @@ const QuestionArtboard = () => {
         </div>
       )}
     </div>
-    
   );
 };
 
