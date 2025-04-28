@@ -89,7 +89,7 @@ const ChatBot = () => {
   }, [getToken]);
 
   return (
-    <div className="h-full w-full rounded-2xl bg-popover p-2">
+    <div className="h-full w-full rounded-2xl bg-popover p-2 mt-8">
       <div className="flex items-center rounded-2xl bg-primary px-4">
         <div className="relative flex size-16 items-center justify-center rounded-full bg-popover">
           <div className="absolute bottom-0 right-0 size-5 rounded-full border-2 border-primary bg-green-500"></div>

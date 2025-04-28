@@ -1,137 +1,112 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { evaluate } from "mathjs";
 
-const ScientificCalculator = () => {
-  const [input, setInput] = useState("");
-  const [result, setResult] = useState<string | null>("");
+import DisplayWindow from "./display-window";
+import KeysWindow from "./keys-window";
 
-  const handleButtonClick = (value: string) => {
-    setInput((prev) => prev + value);
+function ScientificCalculator() {
+  const [expression, setExpression] = useState("");
+  const [displayEXP, setDisplayEXP] = useState("");
+  const [result, setResult] = useState("0");
+
+  const sciFunc: { [key: string]: string } = {
+    sin: "sin",
+    cos: "cos",
+    tan: "tan",
+    ln: "log",
+    log: "log10",
+    π: "pi",
+    e: "e",
+    "^": "^",
+    "√": "sqrt",
   };
 
-  const handleClear = () => {
-    setInput("");
-    setResult("");
-  };
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      const { key } = event;
+      if (key >= "0" && key <= "9") handleButton(key);
+      else if (key === "Enter" || key === "=") handleButton("=");
+      else if (key === "Backspace") handleButton("DEL");
+      else if (key === "Escape") handleButton("AC");
+      else if (["+", "-", "*", "/", ".", "(", ")"].includes(key))
+        handleButton(key);
+      else if (key === "s") handleButton("sin");
+      else if (key === "c") handleButton("cos");
+      else if (key === "t") handleButton("tan");
+      else if (key === "l") handleButton("ln");
+      else if (key === "L") handleButton("log");
+      else if (key === "p") handleButton("π");
+      else if (key === "e") handleButton("e");
+      else if (key === "^") handleButton("^");
+      else if (key === "r") handleButton("√");
+      else if (key === "!") handleButton("!");
+    };
 
-  const handleEvaluate = () => {
-    try {
-      setResult(eval(input));
-    } catch (error) {
-      setResult("Error");
-    }
-  };
+    document.addEventListener("keydown", handleKeyPress);
+    return () => document.removeEventListener("keydown", handleKeyPress);
+  }, [expression, displayEXP]);
 
-  const handleBackspace = () => {
-    setInput((prev) => prev.slice(0, -1));
-  };
-
-  const handleScientificFunction = (func: string) => {
-    try {
-      if (func === "sqrt") {
-        setInput(`Math.sqrt(${input})`);
-      } else if (func === "sin") {
-        setInput(`Math.sin(${input})`);
-      } else if (func === "cos") {
-        setInput(`Math.cos(${input})`);
-      } else if (func === "tan") {
-        setInput(`Math.tan(${input})`);
+  function calcResult() {
+    if (expression.length !== 0) {
+      try {
+        let compute = evaluate(expression);
+        compute = parseFloat(compute.toFixed(4));
+        setResult(compute);
+      } catch (error) {
+        setResult("Error");
       }
-    } catch (error) {
-      setResult("Error");
+    } else {
+      setResult("An Error Occured!");
     }
-  };
+  }
+
+  function handleButton(value: string) {
+    if (value === "AC") {
+      setExpression("");
+      setDisplayEXP("");
+      setResult("0");
+    } else if (value === "=") {
+      calcResult();
+    } else if (value === "DEL") {
+      setDisplayEXP(displayEXP.slice(0, -1));
+      setExpression(expression.slice(0, -1));
+    } else if (Object.prototype.hasOwnProperty.call(sciFunc, value)) {
+      // Automatically add parentheses for scientific functions
+      setDisplayEXP(displayEXP + value + "(");
+      setExpression(expression + sciFunc[value] + "(");
+    } else if (value === "!") {
+      const lastNum = extractLastNum(expression);
+      if (lastNum != null) {
+        const num = parseFloat(lastNum);
+        setDisplayEXP(displayEXP + value);
+        setExpression(expression.replace(lastNum, factorial(num).toString()));
+      }
+    } else {
+      setExpression(expression + value);
+      setDisplayEXP(displayEXP + value);
+    }
+  }
+
+  function factorial(n: number) {
+    let result = 1;
+    for (let i = 1; i <= n; i++) result *= i;
+    return result;
+  }
+
+  function extractLastNum(exp: string) {
+    const numbers = exp.match(/\d+/g);
+    return numbers ? numbers[numbers.length - 1] : null;
+  }
 
   return (
-    <div className="mx-auto mt-6 max-w-xs rounded-lg bg-white p-4 shadow-md">
-      <div className="mb-4 flex flex-col items-center">
-        <div className="mb-2 text-2xl font-semibold">Scientific Calculator</div>
-        <div className="h-16 w-full overflow-hidden break-words rounded-lg bg-gray-200 p-4 text-right text-xl">
-          <p>{input || "0"}</p>
-        </div>
-        <div className="mt-2 h-10 w-full rounded-lg bg-gray-100 p-4 text-right text-2xl">
-          <p>{result}</p>
-        </div>
-      </div>
-      <div className="grid grid-cols-4 gap-2">
-        <Button
-          className="col-span-3 bg-primary p-4 text-2xl font-semibold hover:bg-primary/70"
-          onClick={handleClear}
-        >
-          C
-        </Button>
-        <Button
-          className="bg-primary p-4 text-2xl font-semibold hover:bg-primary/70"
-          onClick={handleBackspace}
-        >
-          ⬅
-        </Button>
-        {["7", "8", "9", "/"].map((value) => (
-          <Button
-            key={value}
-            className="bg-primary p-4 text-2xl font-semibold hover:bg-primary/70"
-            onClick={() => handleButtonClick(value)}
-          >
-            {value}
-          </Button>
-        ))}
-        {["4", "5", "6", "*"].map((value) => (
-          <Button
-            key={value}
-            className="bg-primary p-4 text-2xl font-semibold hover:bg-primary/70"
-            onClick={() => handleButtonClick(value)}
-          >
-            {value}
-          </Button>
-        ))}
-        {["1", "2", "3", "-"].map((value) => (
-          <Button
-            key={value}
-            className="bg-primary p-4 text-2xl font-semibold hover:bg-primary/70"
-            onClick={() => handleButtonClick(value)}
-          >
-            {value}
-          </Button>
-        ))}
-        {["0", ".", "=", "+"].map((value) => (
-          <Button
-            key={value}
-            className="bg-primary p-4 text-2xl font-semibold hover:bg-primary/70"
-            onClick={() =>
-              value === "=" ? handleEvaluate() : handleButtonClick(value)
-            }
-          >
-            {value}
-          </Button>
-        ))}
-        <Button
-          className="bg-primary p-4 text-2xl font-semibold hover:bg-primary/70"
-          onClick={() => handleScientificFunction("sqrt")}
-        >
-          √
-        </Button>
-        <Button
-          className="bg-primary p-4 text-2xl font-semibold hover:bg-primary/70"
-          onClick={() => handleScientificFunction("sin")}
-        >
-          sin
-        </Button>
-        <Button
-          className="bg-primary p-4 text-2xl font-semibold hover:bg-primary/70"
-          onClick={() => handleScientificFunction("cos")}
-        >
-          cos
-        </Button>
-        <Button
-          className="bg-primary p-4 text-2xl font-semibold hover:bg-primary/70"
-          onClick={() => handleScientificFunction("tan")}
-        >
-          tan
-        </Button>
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="w-[350px] rounded-2xl bg-white p-6 shadow-2xl">
+        <DisplayWindow expression={displayEXP} result={result} />
+        <KeysWindow handleButton={handleButton} />
       </div>
     </div>
   );
-};
+}
 
 export default ScientificCalculator;
