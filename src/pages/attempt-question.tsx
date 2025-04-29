@@ -112,7 +112,7 @@ const AttemptQuestion = () => {
               <img
                 src={Bot}
                 alt="bot"
-                className="brightness-30 size-full invert"
+                className="brightness-30 size-full"
               />
             </div>
             <div
@@ -122,7 +122,7 @@ const AttemptQuestion = () => {
               <img
                 src={Calculator}
                 alt="calculator"
-                className="brightness-30 size-full invert"
+                className="brightness-30 size-full"
               />
             </div>
           </div>
