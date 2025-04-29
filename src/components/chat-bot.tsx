@@ -89,7 +89,7 @@ const ChatBot = () => {
   }, [getToken]);
 
   return (
-    <div className="mt-8 h-full w-full rounded-2xl bg-popover p-2">
+    <div className="pt-10 h-full w-full rounded-2xl bg-popover p-2">
       <div className="flex items-center rounded-2xl bg-primary px-4">
         <div className="relative flex size-16 items-center justify-center rounded-full bg-popover">
           <div className="absolute bottom-0 right-0 size-5 rounded-full border-2 border-primary bg-green-500"></div>
@@ -103,7 +103,7 @@ const ChatBot = () => {
         </div>
       </div>
 
-      <div className="flex h-[calc(100vh-182px)] flex-col items-start justify-start gap-4 overflow-y-auto p-4">
+      <div className="flex h-[calc(100vh-215px)] flex-col items-start justify-start gap-4 overflow-y-auto p-4">
         {messages.map((message) => (
           <div
             key={message.id}
