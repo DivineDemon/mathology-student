@@ -96,7 +96,7 @@ const Login = () => {
         </div>
       </div>
       <footer className="flex h-12 w-full items-center justify-center text-xs">
-        <p className="w-full text-center">
+        <p className="w-full text-center text-gray-500">
           &copy; {new Date().getFullYear()} &nbsp;
           <span className="text-primary">Mathology.</span>&nbsp; All Rights
           Reserved
