@@ -53,7 +53,7 @@ const Login = () => {
               Login
             </Link>
             <span className="text-md w-full text-center font-medium text-gray-400">
-              Login to your existing account of Mathology
+            Your math journey starts here. enter your email to sign in to <span className="text-primary">Mathology</span>
             </span>
           </div>
           <form
@@ -66,7 +66,7 @@ const Login = () => {
             <Input
               className="border-sm mb-6 border bg-[#F8F7FC] shadow"
               type="email"
-              placeholder="johndoe@email.com"
+              placeholder="Enter your email"
               value={email}
               required={true}
               onChange={(e) => setEmail(e.target.value)}
