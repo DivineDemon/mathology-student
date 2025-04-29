@@ -77,7 +77,7 @@ const Login = () => {
               size="lg"
               className="w-full"
             >
-              Login
+              LOGIN
             </Button>
           </form>
         </div>
