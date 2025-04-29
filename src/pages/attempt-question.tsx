@@ -105,12 +105,26 @@ const AttemptQuestion = () => {
             </div>
           </div>
           <div className="flex items-center justify-center gap-4">
-            <button type="button" onClick={() => setChat(true)}>
-              <img src={Bot} alt="" />
-            </button>
-            <button type="button" onClick={() => setCalculate(true)}>
-              <img src={Calculator} alt="" />
-            </button>
+            <div
+              className="size-10 cursor-pointer rounded-full bg-primary p-2 transition duration-150 ease-in-out hover:scale-105"
+              onClick={() => setChat(true)}
+            >
+              <img
+                src={Bot}
+                alt="bot"
+                className="brightness-30 size-full invert"
+              />
+            </div>
+            <div
+              className="size-10 cursor-pointer rounded-full bg-primary p-2 transition duration-150 ease-in-out hover:scale-105"
+              onClick={() => setCalculate(true)}
+            >
+              <img
+                src={Calculator}
+                alt="calculator"
+                className="brightness-30 size-full invert"
+              />
+            </div>
           </div>
         </nav>
         <div className="flex h-[calc(100vh-64px)] w-full flex-col items-start justify-start gap-5 p-5">

@@ -4,7 +4,7 @@ import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { CirclePower } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import Logo from "@/assets/img/logo.svg";
+import Logo from "@/assets/img/matholody_logo.png";
 import {
   Sidebar,
   SidebarContent,
@@ -59,7 +59,7 @@ const AppSidebar = () => {
               className="cursor-pointer text-left text-4xl font-bold text-primary dark:text-white"
               onClick={() => navigate("/")}
             >
-              <img src={Logo} alt="" />
+              <img src={Logo} alt="logo" className="h-10" />
             </span>
           </div>
         </SidebarHeader>

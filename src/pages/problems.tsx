@@ -256,9 +256,12 @@ const Problems = () => {
                 {currentData?.map((question, index) => (
                   <TableRow
                     key={index}
-                    className={cn("cursor-pointer bg-gray-100", {
-                      "bg-white": index % 2 === 0,
-                    })}
+                    className={cn(
+                      "cursor-pointer bg-gray-100 hover:bg-gray-200",
+                      {
+                        "bg-white": index % 2 === 0,
+                      }
+                    )}
                     onClick={() =>
                       navigate(`/question-attempt/${question.question_id}`)
                     }
