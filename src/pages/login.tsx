@@ -39,9 +39,6 @@ const Login = () => {
     <div className="flex h-screen w-full flex-col items-center justify-center bg-[#F5F6FA] dark:bg-gray-900">
       <nav className="flex h-12 w-full max-w-7xl items-center justify-start px-5 py-2.5">
         <img src={Logo} className="mt-4 h-10" alt="Logo" />
-        {/* <span className="text-4xl font-bold text-primary dark:text-white">
-        
-        </span> */}
       </nav>
       <div className="grid h-[calc(100vh-96px)] w-full max-w-7xl grid-cols-2 gap-5 overflow-hidden p-5">
         <div className="relative col-span-2 flex w-full flex-col items-center justify-center gap-5 rounded-3xl border bg-[#FFFFFF] p-5 shadow-md dark:bg-gray-700/50 md:col-span-1 lg:p-10 xl:p-20">
