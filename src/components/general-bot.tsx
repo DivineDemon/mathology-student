@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
-
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import MDEditor from "@uiw/react-md-editor";
 import { Loader2, Send } from "lucide-react";
-import { useParams } from "react-router-dom";
-
-import { usePostMathSolutionMutation } from "@/store/services/math";
+import { useMathSupportAIBotMutation } from "@/store/services/math";
 
 import { Input } from "./ui/input";
 
@@ -17,12 +14,11 @@ interface Message {
 }
 
 const GeneralBot = () => {
-  const { id } = useParams();
   const { getToken } = useKindeAuth();
   const [token, setToken] = useState<string>("");
   const [input, setInput] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
-  const [chat, { isLoading }] = usePostMathSolutionMutation();
+  const [chat, { isLoading }] = useMathSupportAIBotMutation();
 
   const handleToken = async () => {
     const newToken = getToken ? await getToken() : "";
@@ -49,7 +45,6 @@ const GeneralBot = () => {
 
     try {
       const response = await chat({
-        question_id: Number(id),
         query: input.trim(),
         token: token,
       });
@@ -61,7 +56,7 @@ const GeneralBot = () => {
               ? {
                   id: Date.now(),
                   sender: "bot",
-                  text: response.data.response,
+                  text: response.data.solution_explain,
                 }
               : msg
           )

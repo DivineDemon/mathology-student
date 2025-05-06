@@ -83,6 +83,22 @@ export const mathApi = api.injectEndpoints({
         },
       }),
     }),
+    mathSupportAIBot: build.mutation({
+      query: ({
+        query,
+        token,
+      }: {
+        query: string;
+        token: string;
+      }) => ({
+        url: "/math/support/ai-bot",
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: { query },
+      }),
+    }),
   }),
 });
 export const {
@@ -91,4 +107,5 @@ export const {
   usePostMathSolveMathMutation,
   useChatbotMutation,
   usePostMathSolMutation,
+  useMathSupportAIBotMutation,
 } = mathApi;
