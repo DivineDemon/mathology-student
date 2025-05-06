@@ -10,6 +10,7 @@ import Edit from "@/assets/img/edit.svg";
 import Note from "@/assets/img/note.svg";
 import Save from "@/assets/img/save.svg";
 import Skillimg from "@/assets/img/skillimg.svg";
+import BotIcon from "@/components/bot-icon";
 import CustomToast from "@/components/custom-toast";
 import Chart from "@/components/profile/chart";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -142,6 +143,7 @@ const Profile = () => {
           <SidebarTrigger className="block lg:hidden" />
           <div className="text-3xl font-bold lg:text-4xl">Profile</div>
         </div>
+        <BotIcon />
       </nav>
       <div className="flex min-h-[calc(100vh-64px)] w-full flex-col items-start justify-start p-5">
         <div className="flex w-full flex-col items-start justify-center gap-5 lg:flex-row">

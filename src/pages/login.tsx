@@ -50,7 +50,8 @@ const Login = () => {
               Login
             </Link>
             <span className="text-md w-full text-center font-medium text-gray-400">
-            Your math journey starts here. enter your email to sign in to <span className="text-primary">Mathology</span>
+              Your math journey starts here. enter your email to sign in to{" "}
+              <span className="text-primary">Mathology</span>
             </span>
           </div>
           <form

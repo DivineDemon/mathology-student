@@ -16,7 +16,7 @@ interface Message {
   isLoading?: boolean;
 }
 
-const ChatBot = () => {
+const GeneralBot = () => {
   const { id } = useParams();
   const { getToken } = useKindeAuth();
   const [token, setToken] = useState<string>("");
@@ -177,4 +177,4 @@ const ChatBot = () => {
   );
 };
 
-export default ChatBot;
+export default GeneralBot;

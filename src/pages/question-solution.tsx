@@ -304,15 +304,11 @@ const QuestionSolution = () => {
             </div>
           </div>
           <div className="flex items-center justify-center gap-4">
-          <div
+            <div
               className="size-10 cursor-pointer rounded-full bg-primary p-2 transition duration-150 ease-in-out hover:scale-105"
               onClick={() => setChat(true)}
             >
-              <img
-                src={Bot}
-                alt="bot"
-                className="brightness-30 size-full"
-              />
+              <img src={Bot} alt="bot" className="brightness-30 size-full" />
             </div>
             <div
               className="size-10 cursor-pointer rounded-full bg-primary p-2 transition duration-150 ease-in-out hover:scale-105"

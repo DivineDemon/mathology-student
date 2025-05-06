@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
+import MDEditor from "@uiw/react-md-editor";
 import { MathJax } from "better-react-mathjax";
 import { Check, Loader2, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -191,14 +192,20 @@ const QuestionArtboard = () => {
                 {isCorrect ? "Correct" : "Incorrect"}
               </h1>
             </div>
-            <div className="flex h-[calc(100vh-240px)] w-full flex-col items-start justify-start gap-2.5 p-5">
+            <div className="flex h-[calc(100vh-260px)] w-full flex-col items-start justify-start gap-2.5 p-5">
               <img src={submittedSolution} alt="solution" className="w-full" />
               {aiSolution ? (
                 <p className="h-full w-full overflow-y-auto text-left">
                   <span>
                     {aiSolution.solution_file_text}
                     <br />
-                    {aiSolution.solution_explain}
+                    <MDEditor.Markdown
+                      source={aiSolution.solution_explain}
+                      style={{
+                        background: "transparent",
+                        color: "black",
+                      }}
+                    />
                   </span>
                 </p>
               ) : reveal ? (

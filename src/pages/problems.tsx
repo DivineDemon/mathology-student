@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+import BotIcon from "@/components/bot-icon";
 import NotFound from "@/components/not-found";
 import { Button } from "@/components/ui/button";
 import {
@@ -230,6 +231,7 @@ const Problems = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            <BotIcon />
           </div>
         </div>
       </nav>

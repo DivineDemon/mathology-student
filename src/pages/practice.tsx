@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { ChevronLeft, ChevronRight, Loader2, Search } from "lucide-react";
 
+import BotIcon from "@/components/bot-icon";
 // import { useNavigate } from "react-router-dom";
 
 // import Sort from "@/assets/img/sort.svg";
@@ -174,6 +175,7 @@ const Practice = () => {
           <div className="relative">
             <Button onClick={openModal}>Start Practice</Button>
           </div>
+          <BotIcon />
         </div>
       </nav>
       {isLoading ? (
