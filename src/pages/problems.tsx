@@ -140,7 +140,7 @@ const Problems = () => {
           key={index}
           onClick={() => handlePageChange(Number(page))}
           className={cn(
-            "size-[44px] rounded-2xl bg-gray-100 font-semibold text-black",
+            "size-[40px] rounded-2xl bg-gray-100 font-semibold text-black",
             {
               "bg-primary text-white": page === currentPage,
             }
@@ -334,7 +334,7 @@ const Problems = () => {
                 disabled={currentPage === 1}
                 className="rounded-2xl border-2 border-gray-300 bg-gray-100 p-2.5 text-primary hover:bg-primary hover:text-white"
               >
-                <ChevronLeft className="size-6" />
+                <ChevronLeft className="size-4" />
               </button>
               <div className="w-fit rounded-2xl border-2 border-gray-300 bg-gray-100 text-primary">
                 {renderPagination()}
@@ -345,7 +345,7 @@ const Problems = () => {
                 disabled={currentPage === totalPages}
                 className="rounded-2xl border-2 border-gray-300 bg-gray-100 p-2.5 text-primary hover:bg-primary hover:text-white"
               >
-                <ChevronRight className="size-6" />
+                <ChevronRight className="size-4" />
               </button>
             </div>
           </div>
